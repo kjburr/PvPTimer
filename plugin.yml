@@ -1,0 +1,30 @@
+name: PvPTimer
+version: 1.1
+description: Prevent new users from being PvPed to death at the start!
+author: lemon42
+authors: [lemon42]
+softdepend: [Vault]
+main: lemon42.PvPTimer.PvPTimer
+database: false
+
+commands:
+   pvptimer:
+      description: PvPTimer main command
+      usage: /pvptimer
+
+permissions:
+    PvPTimer.reload:
+        description: Reloads the plugin
+        default: op
+    PvPTimer.removeOthers:
+        description: Remove other people's protection
+        default: op
+    PvPTimer.checkOthers:
+        description: Check other people's protection
+        default: op
+    PvPTimer.grant:
+        description: Give other players protection
+        default: op
+    PvPTimer.reset:
+        description: Give other players protection
+        default: op

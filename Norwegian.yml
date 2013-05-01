@@ -1,0 +1,49 @@
+#PvPTimer language file
+#Additional languages can be obtained from http://dev.bukkit.org/server-mods/pvptimer/pages/languages
+
+#Variables you can use:
+# %time%    - time left of protection
+# %user%    - the user involved
+# %count%   - the total number of protected users
+# %version% - PvPTimer's version number
+#Certain variables will not be available in all cases.
+#You may also use colors, in the format &[colorcode]
+
+revision: 1
+customFile: false
+author: ChopDonut7
+prefix: '&9[PvPTimer] '
+cannotHurtWhileProtected: Du kan ikke skade andre spillere mens de er beskyttet! Skriv &b/pvptimer remove&9 eller vent &b%time%&9 for å angripe andre spillere.
+cannotHurtOthers: Du kan ikke skade denne spilleren!
+firstTime: Hei %user%! Det virker som om det er den første gangen du spiller på serveren. Du er nå immun mot angrep fra andre spillere for &b%time%&9. Du kan fjerne beskyttelsen når som helst ved å skrive &b/pvptimer remove&9.
+protected: Du er beskyttet av PvPTimer. Beskyttelsen utløper om &b%time%&9. Du kan fjerne beskyttelsen når som helst ved å skrive &b/pvptimer remove&9.
+respawn: Du har gjenoppstått, og har fått PvP beskyttelse for &b%time%&9. Du kan fjerne beskyttelsen når som helst ved å skrive &b/pvptimer remove&9.
+teleport: Du har teleportert, og har fått PvP beskyttelse for &b%time%&9. Du kan fjerne beskyttelsen når som helst ved å skrive &b/pvptimer remove&9.
+worldChange: Du har byttet verden, og har fått PvP beskyttelse for &b%time%&9. Du kan fjerne beskyttelsen når som helst ved å skrive &b/pvptimer remove&9.
+noPickup: Du kan ikke plukke opp gjenstander mens beskyttet. Du kan fjerne beskyttelsen når som helst ved å skrive &b/pvptimer remove&9.
+noContainer: Du kan ikke åpne beholderne mens beskyttet. Du kan fjerne beskyttelsen når som helst ved å skrive &b/pvptimer remove&9.
+protectionExpired: Beskyttelsen har utløpt.
+protectionRemoved: Du er ikke lenger beskyttet av PvPTimer!
+userProtectionRemoved: Spilleren &b%user%&9 er ikke lenger beskyttet av PvPTimer!
+protectionLeft: Du har &b%time%&9 av beskyttelse igjen.
+userProtectionLeft: Spilleren &b%user%&9 har &b%time%&9 av beskyttelse igjen.
+protectionGranted: Du har gitt &b%time%&9 beskyttelse til &b%user%&9.
+protectionGrantedBy: Du har fått &b%time%&9 beskyttelse.
+protectionReset: Beskyttelsen ble nullstilt. Du er nå immun for &b%time%&9.
+protectionResetForAll: Beskyttelsen ble nullstilt for alle online spillere.
+protectionInactiveHere: Du har endret til verden hvor beskyttelsen er deaktivert.
+protectionActiveAgain: Beskyttelsen er aktiv.
+errorPrefix: '&cError: '
+playersOnly: Kun spillere kan bruke denne kommandoen.
+noPerms: Du har ikke tillatelse til å bruke denne kommandoen.
+invalidArgs: Ugyldige argumenter. Skriv &4/pvptimer help&c for mer info.
+notProtected: Du er ikke beskyttet!
+userNotProtected: Spilleren &4%user%&c er ikke beskyttet!
+playerNotFound: Spilleren &4%user%&c finnes ikke!
+hours: timer
+hour: time
+minutes: minutter
+minute: minutt
+seconds: sekunder
+second: sekund
+#End of file

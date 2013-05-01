@@ -1,0 +1,50 @@
+#PvPTimer taalbestand
+#Andere talen kunnen worden gedownload van de website: http://dev.bukkit.org/server-mods/pvptimer/pages/languages
+
+#Te Gebruiken Variabelen:
+# %time%    - tijd die over is voor de PVP bescherming
+# %user%    - de speler
+# %count%   - het aantal beschermende spelers
+# %version% - PvPTimer's versie
+#Sommige variabelen zijn niet altijd beschikbaar.
+#kleuren kunnen ook gebruikt worden, in het format: &[kleurcode]
+
+revision: 1
+customFile: false
+author: Neptuner
+prefix: '&9[PvPTimer] '
+cannotHurtWhileProtected: Je kan geen andere spelers aanvallen als je PVP-bescherming hebt! Typ &b/pvptimer remove&9 of wacht &b%time%&9 om te kunnen PVPen!
+cannotHurtOthers: Je kan deze speler niet aanvallen!
+firstTime: Hallo %user%! Het lijkt er op dat dit je eerste keer in het spel is. Je bent nu immuun tegen PvP aanvallen voor &b%time%&9. Je kan je beveiliging weghalen door te typen: &b/pvptimer remove&9.
+protected: Je bent beschermd door PvPTimer. Je bescherming verloopt in &b%time%&9. Je kan je beveiliging weghalen door te typen: &b/pvptimer remove&9.
+respawn: Je bent gerespawnt en hebt PVP beveiliging gekregen voor &b%time%&9. Je kan je beveiliging weghalen door te typen: &b/pvptimer remove&9.
+teleport: Je bent geteleporteerd en hebt PVP beveiliging gekregen voor &b%time%&9. Je kan je beveiliging weghalen door te typen: &b/pvptimer remove&9.
+worldChange: Je bent van wereld veranderd, en hebt PVP beveiliging gekregen voor &b%time%&9. Je kan je beveiliging weghalen door te typen: &b/pvptimer remove&9.
+noPickup: Je kan geen spullen oppakken met PVP beveiliging. Je kan je beveiliging weghalen door te typen: &b/pvptimer remove&9.
+noContainer: Je kan geen containers gebruiken met PVP beveiliging. Je kan je beveiliging weghalen door te typen: &b/pvptimer remove&9.
+protectionExpired: Je PVP bescherming is verlopen.
+protectionRemoved: Je PVP bescherming is verwijderd!
+userProtectionRemoved: Speler &b%user%&9 heeft niet langer bescherming van PvPTimer!
+protectionLeft: Je hebt &b%time%&9 PVP bescherming over.
+userProtectionLeft: Speler &b%user%&9 heeft &b%time%&9 PVP bescherming over.
+protectionGranted: Je hebt &b%time%&9 PVP bescherming gegeven aan speler &b%user%&9.
+protectionGrantedBy: Je hebt &b%time%&9 PVP bescherming gekregen.
+protectionReset: Je PVP bescherming is gereset. Je hebt nu &b%time%&9 lang immuniteit.
+protectionResetForAll: PVP bescherming gereset voor alle online spelers.
+protectionInactiveHere: Je bent nu in een wereld waar geen PVP bescherming is.
+protectionActiveAgain: De PVP bescherming is nu weer actief.
+errorPrefix: '&cError: '
+playersOnly: Alleen spelers mogen dit commando gebruiken.
+noPerms: Je hebt geen toestemming om dit commando te gebruiken.
+invalidArgs: Verkeerde argumenten. Typ &4/pvptimer help&c voor meer info.
+notProtected: Je hebt geen PVP bescherming!
+userNotProtected: Speler &4%user%&c heeft geen PVP bescherming!
+playerNotFound: Speler &4%user%&c kan niet gevonden worden!
+hours: uren
+hour: uur
+minutes: minuten
+minute: minuut
+seconds: seconden
+second: seconde
+and: en
+#Einde bestand

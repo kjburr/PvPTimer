@@ -1,0 +1,65 @@
+#Configuration file for PvPTimer version 1.1
+#Please refer to http://dev.bukkit.org/server-mods/pvptimer/pages/configuration
+#for more information on the configuration.
+
+#NOTE: For numerical values, please only use whole numbers!
+
+#What language file should the plugin use?
+#Languages are located in /PvPTimer/lang
+language: 'English'
+
+#Time amount to protect players on first join, respawn, consecutive joins, and teleport.
+#Set any to 0 to disable the protection for that type.
+timeAmounts:
+    newPlayers: 10m
+    default:
+        respawn: 30s
+        join: 30s
+        teleport: 10s
+        worldChange:
+            defaultValue: 10s
+            world: 20s
+            world_nether: 20s
+    modrank:
+        respawn: 1m
+        join: 1m
+        teleport: 20s
+        worldChange:
+            defaultValue: 20s
+            world: 1m
+            world_the_end: 30s
+
+#Defines the amount of time between each protection check.
+#Low intervals can cause lag, but will result in more accurate protection times. Checking every second is NOT recommended!
+checkEvery: 10s
+
+#Defines the amount of time between each save to disk.
+#High intervals are recommended, as saving isn't required to be done very often.
+saveEvery: 30m
+
+#Exclude specific worlds from any protection.
+excludedWorlds: [world_excluded1, world_excluded2]
+
+#Types of entity damage to disallow.
+#'player': disable PvP damage only
+#'all': disable all entity damage sources (mob damage, etc.), however this does not protect from environmental damage (i.e. falling)
+damageType: 'player'
+
+#Allows picking up items while protected
+allowPickup: true
+
+#Allows using containers while protected
+allowContainer: true
+
+#Help this plugin by sending anonymous stats to MCStats.
+#Note that if the main Metrics settings are disabled then this will not take effect.
+#Gathered stats are publicly available at http://mcstats.org/plugin/PvPTimer
+enableMetrics: true
+
+#DO NOT ALTER THESE VALUES! It will screw up your configuration!
+#This helps the plugin migrate configurations when updating PvPTimer
+revision: 2
+migratedFrom: -1
+
+#Thanks for using PvPTimer :)
+#Please consider donating if you like this plugin, would help me tons!

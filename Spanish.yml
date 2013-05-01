@@ -1,0 +1,50 @@
+#PvPTimer language file
+#Additional languages can be obtained from http://dev.bukkit.org/server-mods/pvptimer/pages/languages
+
+#Variables you can use:
+# %time%    - time left of protection
+# %user%    - the El jugador involved
+# %count%   - the total number of protected users
+# %version% - PvPTimer's version number
+#Certain variables will not be available in all cases.
+#You may also use colors, in the format &[colorcode]
+
+revision: 1
+customFile: false
+author: lemon42
+prefix: '&9[PvPTimer] '
+cannotHurtWhileProtected: No puedes herir a otros mientras estás protegido! Escribe &b/pvptimer remove&9 o espera &b%time%&9 para poder luchar!
+cannotHurtOthers: No puedes hacer daño a este jugador!
+firstTime: Hola %user%! Esta parece ser la primera vez que juegas. Estás protegido durante &b%time%&9. Puedes desactivar tu protección escribiendo &b/pvptimer remove&9.
+protected: Estás protegido por PvPTimer. Tu protección caducará en &b%time%&9. Puedes desactivar tu protección escribiendo &b/pvptimer remove&9.
+respawn: Has respawneado, por ello te hemos dado &b%time%&9 de protección. Puedes desactivar tu protección escribiendo &b/pvptimer remove&9.
+teleport: Te has teleportado, por ello te hemos dado &b%time%&9 de protección. Puedes desactivar tu protección escribiendo &b/pvptimer remove&9.
+worldChange: Has cambiado de mundo, por ello te hemos dado &b%time%&9 de protección. Puedes desactivar tu protección escribiendo &b/pvptimer remove&9.
+noPickup: No puedes recoger objetos mientras estás protegido. Puedes desactivar tu protección escribiendo &b/pvptimer remove&9.
+noContainer: No puedes abrir contenedores mientras estás protegido. Puedes desactivar tu protección escribiendo &b/pvptimer remove&9.
+protectionExpired: Tu protección a caducado.
+protectionRemoved: Ya no estás protégido por PvPTimer!
+userProtectionRemoved: El jugador &b%user%&9 ya no está protegido por PvPTimer!
+protectionLeft: Tienes &b%time%&9 de protección restante.
+userProtectionLeft: El jugador &b%user%&9 tiene &b%time%&9 de protección restante.
+protectionGranted: Has dado &b%time%&9 de protección a &b%user%&9.
+protectionGrantedBy: Has sido dado &b%time%&9 de protección.
+protectionReset: Tu protección fue reinicializada. Ahora tienes &b%time%&9 de protección.
+protectionResetForAll: Protección reinicializada para todos los jugadores en línea.
+protectionInactiveHere: En este mundo tu protección ha sido desactivada.
+protectionActiveAgain: Tu protección ha sido activada de nuevo.
+errorPrefix: '&cError: '
+playersOnly: Sólo los jugadores pueden utilizar este comando.
+noPerms: No tienes permiso a usar este comando.
+invalidArgs: Argumentos inválidos. Escribe &4/pvptimer help&c para obtener más información.
+notProtected: No estás protegido!
+userNotProtected: El jugador &4%user%&c no está protegido!
+playerNotFound: El jugador &4%user%&c no está en línea!
+hours: horas
+hour: hora
+minutes: minutos
+minute: minuto
+seconds: segundos
+second: segundo
+and: y
+#End of file

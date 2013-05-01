@@ -1,0 +1,50 @@
+#PvPTimer language file
+#Additional languages can be obtained from http://dev.bukkit.org/server-mods/pvptimer/pages/languages
+
+#Variables you can use:
+# %time%    - time left of protection
+# %user%    - the user involved
+# %count%   - the total number of protected users
+# %version% - PvPTimer's version number
+#Certain variables will not be available in all cases.
+#You may also use colors, in the format &[colorcode]
+
+revision: 1
+customFile: false
+author: lemon42
+prefix: '&9[PvPTimer] '
+cannotHurtWhileProtected: You cannot hurt other players while protected! Type &b/pvptimer remove&9 or wait &b%time%&9 to be able to PvP!
+cannotHurtOthers: You cannot hurt this player!
+firstTime: Hello %user%! This seems to be your first time playing. You are now immune from PvP for &b%time%&9. You may remove your protection at any time by typing &b/pvptimer remove&9.
+protected: You are protected by PvPTimer. Your protection will expire in &b%time%&9. You may remove your protection at any time by typing &b/pvptimer remove&9.
+respawn: You have respawned, and have been granted PvP protection for &b%time%&9. You may remove your protection at any time by typing &b/pvptimer remove&9.
+teleport: You have teleported, and have been granted PvP protection for &b%time%&9. You may remove your protection at any time by typing &b/pvptimer remove&9.
+worldChange: You have changed world, and have been granted PvP protection for &b%time%&9. You may remove your protection at any time by typing &b/pvptimer remove&9.
+noPickup: You cannot pick up items whilst protected. You may remove your protection at any time by typing &b/pvptimer remove&9.
+noContainer: You cannot open containers whilst protected. You may remove your protection at any time by typing &b/pvptimer remove&9.
+protectionExpired: Your protection has expired.
+protectionRemoved: You are no longer protected by PvPTimer!
+userProtectionRemoved: User &b%user%&9 is no longer protected by PvPTimer!
+protectionLeft: You have &b%time%&9 of protection left.
+userProtectionLeft: User &b%user%&9 has &b%time%&9 of protection left.
+protectionGranted: You have granted &b%time%&9 of protection to &b%user%&9.
+protectionGrantedBy: You have been granted &b%time%&9 of protection.
+protectionReset: Your protection was reset. You now have &b%time%&9 of immunity.
+protectionResetForAll: Protection reset for all online players.
+protectionInactiveHere: You have changed to a world where protection has been disabled.
+protectionActiveAgain: Your protection is now active again.
+errorPrefix: '&cError: '
+playersOnly: Only players may use this command.
+noPerms: You don't have permissions to use this command.
+invalidArgs: Invalid arguments. Type &4/pvptimer help&c for more info.
+notProtected: You are not protected!
+userNotProtected: User &4%user%&c is not protected!
+playerNotFound: User &4%user%&c not found!
+hours: hours
+hour: hour
+minutes: minutes
+minute: minute
+seconds: seconds
+second: second
+and: and
+#End of file
