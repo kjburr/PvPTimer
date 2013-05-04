@@ -124,6 +124,9 @@ class PvPListener implements Listener {
 		if (PvPTimer.parseTime(config.getString(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(event.getPlayer())))) != 0) {
 			Player p = event.getPlayer();
 			
+			//Fixes world to different world teleport
+			if(event.getFrom().getWorld() != p.getWorld()) return;
+			
 			plugin.checkPlayer(p, false);
 			
 			if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(p)))))) {
