@@ -102,8 +102,9 @@ class Config {
 					int amount = config.getInt("config.timeAmount");
 					String type = config.getString("config.timeMeasure");
 					
-					if(PvPTimer.parseTime(amount + type.substring(0, 1).toLowerCase()) != null)
-						curConfig.set("timeAmounts.newPlayers", "" + amount + type.substring(0, 1).toLowerCase());
+					if(type != null)
+						if(PvPTimer.parseTime(amount + type.substring(0, 1)) != null)
+							curConfig.set("timeAmounts.newPlayers", "" + amount + type.substring(0, 1).toLowerCase());
 				}
 			}
 			

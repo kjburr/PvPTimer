@@ -1,0 +1,50 @@
+#PvPTimer language file
+#Additional languages can be obtained from http://dev.bukkit.org/server-mods/pvptimer/pages/languages
+
+#Variables you can use:
+# %time%    - Pozostaly czas ochrony
+# %user%    - uzytkownik
+# %count%   - Liczba chronionych osób
+# %version% - Wersja PvPTimera
+# Czesc zmiennych nie beda dostepne we wszystkich przypadkach.
+#Mozesz takze uzyc kolorów w formacie &[colorcode]
+
+revision: 1
+customFile: false
+author: Orange
+prefix: '&9[PvPTimer] '
+cannotHurtWhileProtected: Nie mozesz bic innych poniewaz jestes pod ochrona! Mozesz wylaczyc ochrone poprzez wpisanie &b/pvptimer remove&9 albo zaczekac &b%time%&9 aby móc atakowac innych.
+cannotHurtOthers: Nie mozesz uderzyc tego gracza.
+firstTime: Witaj %user%! Chyba jestes na serwerze po raz pierwszy. Jestes chroniony od atakowania innych graczy przez &b%time%&9. Mozesz wylaczyc ochrone poprzez wpisanie komendy &b/pvptimer remove&9.
+protected: Jestes chroniony od ataków innych graczy. Mozesz wylaczyc ochrone uzywajac komendy &b/pvptimer remove&9.
+respawn: Jestes pod ochrona przez nastepne &b%time%&9. Mozesz wylaczyc ochrone uzywajac komendy &b/pvptimer remove&9.
+teleport: Po teleporcie zostala ci przydzielona ochrona na nastepne &b%time%&9. Mozesz wylaczyc ochrone uzywajac komendy &b/pvptimer remove&9.
+worldChange: Zmieniles swiat i zostala ci przydzielona ochrona na nastepne &b%time%&9. Mozesz usunac ochrone uzywajac komendy &b/pvptimer remove&9.
+noPickup: Nie mozesz podniesc przedmiotu gdy jestes pod ochrona. Mozesz usunac ochrone poprzez wpisanie komendy &b/pvptimer remove&9.
+noContainer: Nie mozesz tego zrobic gdy jestes pod ochrona. Mozesz usunac ochrone uzywajac komendy &b/pvptimer remove&9.
+protectionExpired: Twoja ochrona wygasla.
+protectionRemoved: Nie jestes juz pod ochrona.
+userProtectionRemoved: Gracz &b%user%&9 nie jest juz chroniony.
+protectionLeft: Pozostalo ci jeszcze &b%time%&9 ochrony.
+userProtectionLeft: Gracz &b%user%&9 ma jeszcze &b%time%&9 ochrony.
+protectionGranted: Dales &b%time%&9 ochrony dla &b%user%&9.
+protectionGrantedBy: Przyznano ci &b%time%&9 ochrony.
+protectionReset: Twoja ochrona zostala zresetowana i pozostalo ci &b%time%&9 ochrony.
+protectionResetForAll: Resetowanie ochrony dla wszystkich graczy online.
+protectionInactiveHere: Na tym swiecie ochrona jest wylaczona.
+protectionActiveAgain: Twoja ochrona zostala ponownie aktywowana.
+errorPrefix: '&cBlad: '
+playersOnly: Tylko gracze moga uzywac tej komendy.
+noPerms: Nie masz do tego uprawnien.
+invalidArgs: Nieprawidlowa komenda uzyj &4/pvptimer help&c aby zobaczyc dostepne komendy.
+notProtected: Nie jestes pod ochrona!
+userNotProtected: Gracz &4%user%&c nie jest pod ochrona!
+playerNotFound: Gracz &4%user%&c nie zostal odnaleziony!
+hours: godziny
+hour: godzina
+minutes: minuty
+minute: minut
+seconds: sekundy
+second: sekund
+and: i
+#End of file

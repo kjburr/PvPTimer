@@ -183,10 +183,14 @@ public class PvPTimer extends JavaPlugin {
 		}
 	}
 	public String getGroup(Player p) {
-		if(groups == null) return "default";
-		
-		String g = perms.getPrimaryGroup(p);
-		if(groups.contains(g)) return g;
+		try {
+			if(groups == null) return "default";
+			
+			String g = perms.getPrimaryGroup(p);
+			if(groups.contains(g)) return g;
+		} catch(UnsupportedOperationException e) {
+			// Probably no groups?
+		}
 		return "default";
 	}
 	@Override
@@ -371,7 +375,7 @@ public class PvPTimer extends JavaPlugin {
 	static Long parseTime(String time) {
 		if(time == null) return 0L;
 		//Example strings: 1h, 10m, 30s, 1h10m, 1h10m30s, 10m30s, etc.
-		time = time.trim(); // Do some firt time checks.
+		time = time.toLowerCase().trim(); // Do some firt time checks.
 		//Variables to hold values ;D
 		Long hours = 0L, minutes = 0L, seconds = 0L;
 		String curVal;

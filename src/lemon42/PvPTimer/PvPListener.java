@@ -86,20 +86,22 @@ class PvPListener implements Listener {
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onJoin(PlayerJoinEvent event) {
-		if (PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(event.getPlayer())))) != 0) {
-			Player p = event.getPlayer();
-			plugin.checkPlayer(p, false);
-			//plugin.log.info("Player " + p.getName() + " timestamp is " +p.getFirstPlayed() + ", current timestamp is " + System.currentTimeMillis() + ", diff is " + (System.currentTimeMillis() - p.getFirstPlayed()));
-			if ((System.currentTimeMillis() - p.getFirstPlayed()) <= 2000 && !plugin.times.containsKey(p.getName())) { //New player... woo.
-				plugin.addPlayer(p, p.getFirstPlayed(), TimeItemType.FIRSTJOIN);
-				p.sendMessage(plugin.prefix + plugin.lang("firstTime", p.getName(), PvPTimer.parseTime(config.getString("timeAmounts.newPlayers"))));
-			} else {
-				if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(p)))))) {
-					plugin.addPlayer(p, System.currentTimeMillis(), TimeItemType.JOIN);
-				}
-				
-				if (plugin.times.containsKey(p.getName())) p.sendMessage(plugin.prefix + plugin.lang("protected", p.getName(), plugin.getTimeLeft(p)));
+		Player p = event.getPlayer();
+		plugin.checkPlayer(p, false);
+		//plugin.log.info("Player " + p.getName() + " timestamp is " +p.getFirstPlayed() + ", current timestamp is " + System.currentTimeMillis() + ", diff is " + (System.currentTimeMillis() - p.getFirstPlayed()));
+		if ((System.currentTimeMillis() - p.getFirstPlayed()) <= 2000 && !plugin.times.containsKey(p.getName())) { //New player... woo.
+			if(PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.FIRSTJOIN, plugin.getGroup(event.getPlayer())))) == 0) return;
+			
+			plugin.addPlayer(p, p.getFirstPlayed(), TimeItemType.FIRSTJOIN);
+			p.sendMessage(plugin.prefix + plugin.lang("firstTime", p.getName(), PvPTimer.parseTime(config.getString("timeAmounts.newPlayers"))));
+		} else {
+			if(PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(event.getPlayer())))) == 0) return;
+			
+			if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(p)))))) {
+				plugin.addPlayer(p, System.currentTimeMillis(), TimeItemType.JOIN);
 			}
+			
+			if (plugin.times.containsKey(p.getName())) p.sendMessage(plugin.prefix + plugin.lang("protected", p.getName(), plugin.getTimeLeft(p)));
 		}
 	}
 	
