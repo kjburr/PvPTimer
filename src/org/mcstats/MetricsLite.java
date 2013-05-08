@@ -133,6 +133,11 @@ public class MetricsLite {
      */
     public boolean start() {
         synchronized (optOutLock) {
+        	// PvPTimer: Are we running a development build?
+        	if(plugin.getDescription().getVersion().contains("dev")) {
+        		return false;
+        	}
+        	
             // Did we opt out?
             if (isOptOut()) {
                 return false;
