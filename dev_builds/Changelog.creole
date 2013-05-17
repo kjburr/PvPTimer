@@ -1,0 +1,8 @@
+Version 1.1.2
+* Fixed container configuration.
+* Fixed teleporting to different worlds causing exceptions.
+
+Version 1.1.1
+* Fixed migration issue
+* Fixed first join protection
+* Fixed group issues
