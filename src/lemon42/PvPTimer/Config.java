@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
 
 import lemon42.PvPTimer.PvPTimer;
+import lemon42.PvPTimer.Utils.FlatListReader;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
