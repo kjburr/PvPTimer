@@ -103,6 +103,10 @@ class PvPListener implements Listener {
 			
 			if (plugin.times.containsKey(p.getName())) p.sendMessage(plugin.prefix + plugin.lang("protected", p.getName(), plugin.getTimeLeft(p)));
 		}
+		
+		//Update notification!
+		if(plugin.updater.isUpdateNeeded() && p.hasPermission("PvPTimer.updateNotify"))
+			p.sendMessage(plugin.prefix + plugin.lang("updateAvailable").replace("%link%", plugin.updater.getLink()));
 	}
 	
 	@EventHandler(ignoreCancelled = true)

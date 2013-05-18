@@ -9,7 +9,7 @@
 #Toutes les variables ne sont pas forcément utilisables tout le temps.
 #Les couleurs sont aussi disponibles, sous la forme &[couleur]
 
-revision: 1
+revision: 2
 customFile: false
 author: lemon42
 prefix: '&9[PvPTimer] '
@@ -33,6 +33,7 @@ protectionReset: Ta protection a été réinitialisée. Tu as maintenant b%time%&9 d
 protectionResetForAll: Protection réinitialisée pour tous les joueurs connectés.
 protectionInactiveHere: Tu viens d'entrer dans un monde où la protection à été désactivée.
 protectionActiveAgain: Ta protection est de nouveau active.
+updateAvailable: 'Une mise à jour est disponible! Téléchargez-la ici: &b%link%'
 errorPrefix: '&cErreur: '
 playersOnly: Cette commande ne peux être utilisée que par des joueurs.
 noPerms: Tu n'as pas assez de permissions pour utiliser cette commande.

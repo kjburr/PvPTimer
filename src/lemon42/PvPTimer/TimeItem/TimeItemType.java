@@ -7,7 +7,7 @@ public enum TimeItemType {
 	ADMIN(3), //Admin given protections
 	TELEPORT(4),//Teleporting :0
 	WORLDCHANGE(5), //On changing worlds.
-	TIMEOUT(255); //Disallow protection when in timeout. Added for next update.
+	TIMEOUT(255); //Disallow protection when in timeout. Added for next update?
 	
 	//Constructor
 	TimeItemType(int id) {
@@ -23,6 +23,9 @@ public enum TimeItemType {
 		for(TimeItemType t : TimeItemType.values())
 			if(t.getId() == i) return t;
 		return null;
+	}
+	public static String getConfigNode(TimeItemType t) {
+		return getConfigNode(t, "default");
 	}
 	public static String getConfigNode(TimeItemType t, String group) {
 		if(t == TimeItemType.FIRSTJOIN) return "timeAmounts.newPlayers";

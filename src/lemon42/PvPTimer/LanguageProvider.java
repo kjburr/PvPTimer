@@ -98,7 +98,7 @@ class LanguageProvider {
 	public String get(String key, String user, Long time) {
 		String ret = get(key);
 		if(user != null) ret = ret.replace("%user%", user);
-		if(time != null) ret = ret.replace("%time%", PvPTimer.formatTime(time));
+		if(time != null) ret = ret.replace("%time%", plugin.formatTime(time));
 		return ret;
 	}
 	public int getRevision() {

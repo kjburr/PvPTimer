@@ -28,3 +28,6 @@ permissions:
     PvPTimer.reset:
         description: Give other players protection
         default: op
+    PvPTimer.updateNotify:
+        description: Notifies the user about updates
+        default: op

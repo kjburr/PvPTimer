@@ -38,7 +38,8 @@ public class PvPTimer extends JavaPlugin {
 	public Config config;
 	public List<String> excludedWorlds;
 	public List<String> groups; //This contains the groups which, in the config, are not default.
-
+	public Updater updater;
+	
 	//These values are replaced by language loading, but kept for reference.
 	public String prefix = ChatColor.BLUE + "[PvPTimer] ";
 	public String cannotHurt = prefix + "You cannot hurt this player!";
@@ -53,6 +54,7 @@ public class PvPTimer extends JavaPlugin {
 		log = this.getLogger();
 		config = new Config(this);
 		lang = new LanguageProvider(this);
+		updater = new Updater(this);
 		
 		//Preinit
 		times = new HashMap<String, TimeItem>();
@@ -107,6 +109,10 @@ public class PvPTimer extends JavaPlugin {
 			log.severe("/!\\ COULD NOT INITIALIZE SAVE THREAD! /!\\");
 		}
 		
+		//Check for updates
+		if(config.getBoolean("checkForUpdates")) updater.check();
+		if(updater.isUpdateNeeded()) log.info("An update is available! Download it here: " + updater.getLink());
+		//Yay!
 		log.info("Version " + getDescription().getVersion() + " enabled!");
 	}
 	@Override
@@ -137,7 +143,7 @@ public class PvPTimer extends JavaPlugin {
 		errorArgs = errorPrefix + lang("invalidArgs");
 		notProtected = errorPrefix + lang("notProtected");
 	}
-	public static String lang(String key) {
+	public String lang(String key) {
 		return lang.get(key);
 	}
 	public String lang(String key, String user) {
@@ -154,10 +160,7 @@ public class PvPTimer extends JavaPlugin {
 		groups = null;
 		perms = null;
 		
-		Plugin plug = null;
-		try {
-			plug = getServer().getPluginManager().getPlugin("Vault");
-		} catch (Exception e) {}
+		Plugin plug = getServer().getPluginManager().getPlugin("Vault");
 		
 		if (plug == null) {
 			log.warning("Vault plugin not found. Values will be fetched from timeAmounts.default!");
@@ -170,9 +173,9 @@ public class PvPTimer extends JavaPlugin {
 		            groups = new ArrayList<String>();
 		            
 		            //Load all groups :3
-		            for(String g : perms.getGroups()) {
+		            for(String g : perms.getGroups())
 		            	if(config.contains("timeAmounts." + g)) groups.add(g);
-		            }
+
 		            log.info("Hooked to Vault, using permissions plugin: " + perms.getName());
 		        } else {
 		        	log.warning("Vault plugin found, but reported no permissions system. Values will be fetched from timeAmounts.default!");
@@ -183,14 +186,15 @@ public class PvPTimer extends JavaPlugin {
 		}
 	}
 	public String getGroup(Player p) {
+		if(groups == null) return "default";
+		
 		try {
-			if(groups == null) return "default";
-			
 			String g = perms.getPrimaryGroup(p);
 			if(groups.contains(g)) return g;
 		} catch(UnsupportedOperationException e) {
 			// Probably no groups?
 		}
+		
 		return "default";
 	}
 	@Override
@@ -204,6 +208,7 @@ public class PvPTimer extends JavaPlugin {
 		
 		if (cmd.getName().equalsIgnoreCase("pvptimer")) {
 			if (args[0].equalsIgnoreCase("help")) {
+				//TODO: Should we have some language keys for these too? Hmmm...
 				sender.sendMessage(ChatColor.BLUE + "PvPTimer " + getDescription().getVersion() + " help");
 				sender.sendMessage(ChatColor.BLUE + "Currently protecting " + times.size() + " player" + (times.size() != 1 ? "s" : ""));
 
@@ -263,6 +268,7 @@ public class PvPTimer extends JavaPlugin {
 			} else if(args[0].equalsIgnoreCase("reload")) {
 				if(args.length == 1) {
 					if(sender.hasPermission("PvPTimer.reload")) {
+						//TODO: Make an universal function to reload so I don't have to update this aswell as the first load ._.
 						boolean error = false;
 						
 						//1) Save
@@ -317,8 +323,13 @@ public class PvPTimer extends JavaPlugin {
 						if(!error) {
 							sender.sendMessage(prefix + "Plugin reloaded.");
 						} else {
-							sender.sendMessage(ChatColor.RED + "An error occured. More details might be found at the console.");
-							log.severe("An error occured while reloading the plugin in-game. Please check your files and contact the plugin developers if nescesary.");
+							if(sender instanceof Player) {
+								sender.sendMessage(ChatColor.RED + "An error occured. More details might be found at the console.");
+								log.severe("An error occured while reloading the plugin in-game. Please check your files and contact the plugin developers if nescesary.");
+							} else {
+								sender.sendMessage(ChatColor.RED + "An error occured!");
+								log.severe("An error occured while reloading the plugin. Please check your files and contact the plugin developers if nescesary.");
+							}
 						}
 					} else sender.sendMessage(errorPerms);
 				} else sender.sendMessage(errorArgs);
@@ -326,19 +337,15 @@ public class PvPTimer extends JavaPlugin {
 				if(args.length == 3) { //grant, player, time
 					if(sender.hasPermission("PvPTimer.grant")) {
 						OfflinePlayer p = getServer().getOfflinePlayer(args[1]);
-						Long t = parseTime(args[2]);
 						if(!p.isOnline()) {
 							sender.sendMessage(errorPrefix + lang("playerNotFound", p.getName()));
 							return true;
 						}
+						
+						Long t = parseTime(args[2]);
 						if(t == 0L) {
-							//Fallback for seconds
-							try {
-								t = Long.parseLong(args[2]) * 1000;
-							} catch(Exception e) {
-								sender.sendMessage(errorArgs);
-								return true;
-							}
+							sender.sendMessage(errorArgs);
+							return true;
 						}
 						
 						Player p2 = p.getPlayer();
@@ -392,10 +399,23 @@ public class PvPTimer extends JavaPlugin {
 			else if (curVal.endsWith("m") && minutes == 0) minutes = Long.parseLong(curVal.replace("m", ""));
 			else if (curVal.endsWith("h") && hours == 0) hours = Long.parseLong(curVal.replace("h", ""));
 		}
-		if (!found) return 0L;
+		
+		if (!found) {
+			//Fallback for seconds
+			try {
+				Long value = Long.parseLong(time) * 1000;
+				if(value < 0) return 0L;
+				return value;
+			} catch(Exception e) {
+				return 0L;
+			}
+		}
+		
+		//Found, it seems.
+		if(seconds < 0 || minutes < 0 || seconds < 0) return 0L;
 		return (Long)(seconds * 1000 + minutes * 1000 * 60 + hours * 1000 * 60 * 60);
 	}
-	static String formatTime(Long time) {
+	public String formatTime(Long time) {
 		if(time == null || time < 0) return "";
 		
 		int seconds = (int)(Math.ceil(time / 1000) % 60);
