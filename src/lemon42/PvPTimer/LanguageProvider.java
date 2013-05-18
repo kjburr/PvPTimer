@@ -89,7 +89,7 @@ class LanguageProvider {
 		//Testing.
 		if(!loaded || lang == null || lang.getString(key) == null) return "MISSING: " + key;
 		if(key == "revision" || key == "customFile") return "";
-		return ChatColor.translateAlternateColorCodes('&', lang.getString(key));
+		return ChatColor.translateAlternateColorCodes('&', lang.getString(key)).replace("\\n", "\n");
 	}
 	public String get(String key) {
 		String ret = getRaw(key).replace("%version%", plugin.getDescription().getVersion());
@@ -171,7 +171,8 @@ class LanguageProvider {
 		
 		//Set new keys
 		for(String k : def.getKeys(true))
-			if(k != "revision" && k != "customFile" && (!conf.contains(k) || (!customFile || conf.get(k) != def.get(k)))) { conf.set(k, def.get(k)); changed = true; }
+			if(k != "revision" && k != "customFile" && (!conf.contains(k) || (!customFile || conf.get(k) != def.get(k))))
+			{ conf.set(k, def.get(k)); changed = true; }
 		
 		try {
 			save(lang, plugin.localFile("lang" + File.separator + locale + ".yml"), changed);
