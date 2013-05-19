@@ -89,7 +89,7 @@ class LanguageProvider {
 		//Testing.
 		if(!loaded || lang == null || lang.getString(key) == null) return "MISSING: " + key;
 		if(key == "revision" || key == "customFile") return "";
-		return ChatColor.translateAlternateColorCodes('&', lang.getString(key));
+		return ChatColor.translateAlternateColorCodes('&', lang.getString(key)).replace("\\n", "\n");
 	}
 	public String get(String key) {
 		String ret = getRaw(key).replace("%version%", plugin.getDescription().getVersion());
@@ -98,7 +98,7 @@ class LanguageProvider {
 	public String get(String key, String user, Long time) {
 		String ret = get(key);
 		if(user != null) ret = ret.replace("%user%", user);
-		if(time != null) ret = ret.replace("%time%", PvPTimer.formatTime(time));
+		if(time != null) ret = ret.replace("%time%", plugin.formatTime(time));
 		return ret;
 	}
 	public int getRevision() {
@@ -162,19 +162,22 @@ class LanguageProvider {
 		fstream.close();
 	}
 	public void migrate(FileConfiguration conf, FileConfiguration def, String locale) {
-		//Remove keys that aren't present anymore
-		boolean changed = false;
-		boolean customFile = conf.getBoolean("customFile");
+		//Don't migrate if customFile! ._.
+		if(conf.getBoolean("customFile")) return;
 		
+		boolean changed = false;
+		
+		//Remove keys that aren't present anymore
 		for(String k : conf.getKeys(true))
 			if(k != "revision" && k != "customFile" && !def.contains(k)) { conf.set(k, null); changed = true; }
 		
 		//Set new keys
 		for(String k : def.getKeys(true))
-			if(k != "revision" && k != "customFile" && (!conf.contains(k) || (!customFile || conf.get(k) != def.get(k)))) { conf.set(k, def.get(k)); changed = true; }
-		
+			if(k != "customFile" && (!conf.contains(k) || conf.get(k) != def.get(k)))
+			{ conf.set(k, def.get(k)); changed = true; }
+
 		try {
-			save(lang, plugin.localFile("lang" + File.separator + locale + ".yml"), changed);
+			save(conf, plugin.localFile("lang" + File.separator + locale + ".yml"), changed);
 		} catch (IOException e) {
 			plugin.log.warning("Error while migrating language file " + locale);
 			e.printStackTrace();

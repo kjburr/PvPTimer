@@ -1,5 +1,5 @@
 name: PvPTimer
-version: 1.1.1dev
+version: 1.2
 description: Prevent new users from being PvPed to death at the start!
 author: lemon42
 authors: [lemon42]
@@ -27,4 +27,7 @@ permissions:
         default: op
     PvPTimer.reset:
         description: Give other players protection
+        default: op
+    PvPTimer.updateNotify:
+        description: Notifies the user about updates
         default: op

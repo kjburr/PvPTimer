@@ -103,6 +103,10 @@ class PvPListener implements Listener {
 			
 			if (plugin.times.containsKey(p.getName())) p.sendMessage(plugin.prefix + plugin.lang("protected", p.getName(), plugin.getTimeLeft(p)));
 		}
+		
+		//Update notification!
+		if(plugin.updater.isUpdateNeeded() && p.hasPermission("PvPTimer.updateNotify"))
+			p.sendMessage(plugin.prefix + plugin.lang("updateAvailable").replace("%link%", plugin.updater.getLink()));
 	}
 	
 	@EventHandler(ignoreCancelled = true)
@@ -122,12 +126,12 @@ class PvPListener implements Listener {
 	}
 	
 	@EventHandler(ignoreCancelled = true)
-	public void onTeleport(PlayerTeleportEvent event) {
+	public void onTeleport(PlayerTeleportEvent event) {		
 		if (PvPTimer.parseTime(config.getString(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(event.getPlayer())))) != 0) {
 			Player p = event.getPlayer();
 			
 			//Fixes world to different world teleport
-			if(event.getFrom().getWorld() != p.getWorld()) return;
+			if(event.getFrom().getWorld() != event.getTo().getWorld()) return;
 			
 			plugin.checkPlayer(p, false);
 			
@@ -169,8 +173,10 @@ class PvPListener implements Listener {
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPickup(PlayerPickupItemEvent event) {
+		if(config.getBoolean("allowPickup")) return;
+		
 		Player p = event.getPlayer();
-		if (!config.getBoolean("allowPickup") && plugin.isProtected(p)) {
+		if (plugin.isProtected(p)) {
 			event.setCancelled(true);
 			boolean send = false;
 			if (lastSent.containsKey(event.getPlayer().getName())) {
@@ -187,6 +193,8 @@ class PvPListener implements Listener {
 	//Prevents opening containers
 	@EventHandler
 	public void onInventoryOpen(InventoryOpenEvent event) {
+		if(config.getBoolean("allowContainer")) return;
+		
 		Player player = (Player)event.getPlayer();
 		Player invHolder = null;
 		if((event.getInventory().getHolder() instanceof Player)) invHolder = (Player)event.getInventory().getHolder();
@@ -198,6 +206,8 @@ class PvPListener implements Listener {
 	//Prevents the animation
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onChestOpen(PlayerInteractEvent event) {
+		if(config.getBoolean("allowContainer")) return;
+		
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if(event.getClickedBlock().getTypeId() == 54 || event.getClickedBlock().getTypeId() ==  130) {
 				Player player = (Player)event.getPlayer();

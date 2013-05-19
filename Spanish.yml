@@ -9,7 +9,7 @@
 #Certain variables will not be available in all cases.
 #You may also use colors, in the format &[colorcode]
 
-revision: 1
+revision: 2
 customFile: false
 author: lemon42
 prefix: '&9[PvPTimer] '
@@ -33,6 +33,7 @@ protectionReset: Tu protección fue reinicializada. Ahora tienes &b%time%&9 de pr
 protectionResetForAll: Protección reinicializada para todos los jugadores en línea.
 protectionInactiveHere: En este mundo tu protección ha sido desactivada.
 protectionActiveAgain: Tu protección ha sido activada de nuevo.
+updateAvailable: 'Hay una actualización disponible! Descárgala aquí: &b%link%'
 errorPrefix: '&cError: '
 playersOnly: Sólo los jugadores pueden utilizar este comando.
 noPerms: No tienes permiso a usar este comando.

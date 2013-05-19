@@ -56,6 +56,9 @@ allowContainer: true
 #Gathered stats are publicly available at http://mcstats.org/plugin/PvPTimer
 enableMetrics: true
 
+#Wether or not to check for updates
+checkForUpdates: true
+
 #DO NOT ALTER THESE VALUES! It will screw up your configuration!
 #This helps the plugin migrate configurations when updating PvPTimer
 revision: 2

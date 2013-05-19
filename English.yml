@@ -9,7 +9,7 @@
 #Certain variables will not be available in all cases.
 #You may also use colors, in the format &[colorcode]
 
-revision: 1
+revision: 2
 customFile: false
 author: lemon42
 prefix: '&9[PvPTimer] '
@@ -20,7 +20,7 @@ protected: You are protected by PvPTimer. Your protection will expire in &b%time
 respawn: You have respawned, and have been granted PvP protection for &b%time%&9. You may remove your protection at any time by typing &b/pvptimer remove&9.
 teleport: You have teleported, and have been granted PvP protection for &b%time%&9. You may remove your protection at any time by typing &b/pvptimer remove&9.
 worldChange: You have changed world, and have been granted PvP protection for &b%time%&9. You may remove your protection at any time by typing &b/pvptimer remove&9.
-noPickup: You cannot pick up items whilst protected. You may remove your protection at any time by typing &b/pvptimer remove&9.
+noPickup: You cannot pickup items whilst protected. You may remove your protection at any time by typing &b/pvptimer remove&9.
 noContainer: You cannot open containers whilst protected. You may remove your protection at any time by typing &b/pvptimer remove&9.
 protectionExpired: Your protection has expired.
 protectionRemoved: You are no longer protected by PvPTimer!
@@ -33,6 +33,8 @@ protectionReset: Your protection was reset. You now have &b%time%&9 of immunity.
 protectionResetForAll: Protection reset for all online players.
 protectionInactiveHere: You have changed to a world where protection has been disabled.
 protectionActiveAgain: Your protection is now active again.
+updateAvailable: 'An update is available! Download it here: &b%link%'
+
 errorPrefix: '&cError: '
 playersOnly: Only players may use this command.
 noPerms: You don't have permissions to use this command.

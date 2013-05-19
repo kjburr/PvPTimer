@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
 
 import lemon42.PvPTimer.PvPTimer;
+import lemon42.PvPTimer.Utils.FlatListReader;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -50,7 +51,6 @@ class Config {
 		config = YamlConfiguration.loadConfiguration(plugin.localFile("config.yml"));
 		curConfig = YamlConfiguration.loadConfiguration(plugin.getResource("config.yml"));
 		
-		plugin.log.info(config.getString("allowPickup"));
 		//Get paths
 		Set<String> thisPaths = curConfig.getKeys(true);
 		Set<String> paths = config.getKeys(true);
