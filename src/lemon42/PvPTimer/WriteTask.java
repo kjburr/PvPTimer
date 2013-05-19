@@ -17,11 +17,6 @@ class WriteTask implements Runnable {
 		String newChecksum = Checksum.compute(plugin.times);
 		
 		if(newChecksum != lastChecksum) {
-//			if(lastChecksum == "this is not a checksum dummy string") {
-//				lastChecksum = newChecksum;
-//				return;
-//			}
-			
 			lastChecksum = newChecksum;
 			
 			try {

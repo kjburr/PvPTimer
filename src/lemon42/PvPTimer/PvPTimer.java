@@ -111,7 +111,7 @@ public class PvPTimer extends JavaPlugin {
 		
 		//Check for updates
 		if(config.getBoolean("checkForUpdates")) updater.check();
-		if(updater.isUpdateNeeded()) log.info("An update is available! Download it here: " + updater.getLink());
+		
 		//Yay!
 		log.info("Version " + getDescription().getVersion() + " enabled!");
 	}
