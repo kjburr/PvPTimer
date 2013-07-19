@@ -1,0 +1,51 @@
+#PvPTimer language file
+#Additional languages can be obtained from http://dev.bukkit.org/server-mods/pvptimer/pages/languages
+
+#Variables you can use:
+# %time%    - time left of protection
+# %user%    - the user involved
+# %count%   - the total number of protected users
+# %version% - PvPTimer's version number
+#Certain variables will not be available in all cases.
+#You may also use colors, in the format &[colorcode]
+
+revision: 2
+customFile: false
+author: H8llfire
+prefix: '&9[PvPTimer] '
+cannotHurtWhileProtected: Du kannst andere Spieler nicht angreifen waehrend du geschuetzt bist! Gib &b/pvptimer remove&9 ein oder warte &b%time%&9 um kaempfen zu koennen!
+cannotHurtOthers: Dieser Spieler ist geschuetzt!
+firstTime: Hallo %user%! Dies scheint das erste mal zu sein das du hier spielst. Du bist PvP immun fuer &b%time%&9. Du kannst deinen Schutz entfernen mit &b/pvptimer remove&9.
+protected: Du bist geschuetzt durch PvPTimer. Dein Schutz laeuft in &b%time%&9 aus. Du kannst deinen Schutz entfernen mit &b/pvptimer remove&9.
+respawn: Du bist neu gespawned und hast PvP Schutz fuer &b%time%&9 erhalten. Du kannst deinen Schutz entfernen mit &b/pvptimer remove&9.
+teleport: Du hast dich teleportiert und erhaelst Schutz fuer &b%time%&9. Du kannst deinen Schutz entfernen mit &b/pvptimer remove&9.
+worldChange: Du hast die Welt geaendernt und erhaelst Schutz fuer &b%time%&9. Du kannst deinen Schutz entfernen mit &b/pvptimer remove&9.
+noPickup: Du kannst keine Items aufheben waehren du geschuetzt bist. Du kannst deinen Schutz entfernen mit &b/pvptimer remove&9.
+noContainer: Du kannst keine Container oeffnen waehrend du geschuetzt bist. Du kannst deinen Schutz entfernen mit &b/pvptimer remove&9.
+protectionExpired: Dein schutz ist ausgelaufen.
+protectionRemoved: Du bist nicht mehr geschuetzt durch PvPTimer!
+userProtectionRemoved: Spieler &b%user%&9 ist nicht mehr geschuetzt!
+protectionLeft: Du hast &b%time%&9 Schutz uebrig.
+userProtectionLeft: Spieler &b%user%&9 hat &b%time%&9 Schutz uebrig.
+protectionGranted: Du hast dem Spieler &b%user%&9 fuer &b%time%&9 Schutz gegeben.
+protectionGrantedBy: Die wurden &b%time%&9 Schutz gegeben.
+protectionReset: Dein PvP Schutz wurde zurueckgesetzt. Du bist nun fuer &b%time%&9 immun.
+protectionResetForAll: PvP Schutz fuer alle Spieler zurueckgesetzt.
+protectionInactiveHere: Du bist in einer Welt in der du nicht geschuetzt bist.
+protectionActiveAgain: Dein Schutz ist nun wieder aktiv.
+updateAvailable: 'Ein Update ist verfuegbar! Bekomme es hier: &b%link%'
+errorPrefix: '&cFehler: '
+playersOnly: Nur Spieler koennen dies benutzen.
+noPerms: Du hast keine Rechte fuer dieses Kommando.
+invalidArgs: Ungueltiges Kommando. Gib &4/pvptimer help&c ein fuer mehr Informationen.
+notProtected: Du bist nicht geschuetzt!
+userNotProtected: Spieler &4%user%&c ist nicht geschuetzt!
+playerNotFound: Spieler &4%user%&c nicht gefunden!
+hours: Stunden
+hour: Stunde
+minutes: Minuten
+minute: Minute
+seconds: Sekunden
+second: Sekunde
+and: und
+#End of file
