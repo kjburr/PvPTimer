@@ -22,7 +22,7 @@ class LanguageProvider {
 	public LanguageProvider(PvPTimer instance) {
 		//constructor
 		plugin = instance;
-		def = YamlConfiguration.loadConfiguration(plugin.getResource("English.yml"));
+		def = YamlConfiguration.loadConfiguration(plugin.getResource("lang/English.yml"));
 	}
 
 	public void saveDefault() {

@@ -2,6 +2,8 @@ package lemon42.PvPTimer;
 
 import java.util.HashMap;
 import lemon42.PvPTimer.TimeItem.TimeItemType;
+
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -209,7 +211,7 @@ class PvPListener implements Listener {
 		if(config.getBoolean("allowContainer")) return;
 		
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			if(event.getClickedBlock().getTypeId() == 54 || event.getClickedBlock().getTypeId() ==  130) {
+			if(event.getClickedBlock().getType() == Material.CHEST || event.getClickedBlock().getType() == Material.ENDER_CHEST) {
 				Player player = (Player)event.getPlayer();
 				if(player != null && plugin.isProtected(player)) {
 					event.setCancelled(true);

@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.channels.FileChannel;
 
 import lemon42.PvPTimer.PvPTimer;
 import lemon42.PvPTimer.Utils.FlatListReader;
@@ -119,19 +118,15 @@ class Config {
 				try {
 					if(theConfigBackup.exists()) theConfigBackup.delete();
 					theConfigBackup.createNewFile();
+
+					FileInputStream source = new FileInputStream(theConfig);
+					FileOutputStream destination = new FileOutputStream(theConfigBackup);
 					
-					FileChannel source = null;
-					FileChannel destination = null;
-					try {
-						source = new FileInputStream(theConfig).getChannel();
-						destination = new FileOutputStream(theConfigBackup).getChannel();
-						
-						long count = 0;
-						while((count += destination.transferFrom(source, count, source.size()-count))<source.size());
-					} finally {
-						if(source != null) source.close();
-						if(destination != null) destination.close();
-					}
+					long count = 0;
+					while((count += destination.getChannel().transferFrom(source.getChannel(), count, source.getChannel().size() - count)) < source.getChannel().size());
+					
+					if(source != null) source.close();
+					if(destination != null) destination.close();
 				} catch (Exception e) {
 					plugin.printException(e, "Error while creating backup!");
 				}
