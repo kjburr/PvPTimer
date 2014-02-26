@@ -76,7 +76,7 @@ class PvPListener implements Listener {
 			Player hurtPlayer = (Player)event.getEntity();
 			if (plugin.isProtected(hurtPlayer)) { //damage by entity
 				//HURT IS PROTECTED, DISALLOW ALL DAMAGE IF CONFIG
-				if (config.getString("damageType") == "all") event.setCancelled(true);
+				if (config.getString("damageType").equalsIgnoreCase("all")) event.setCancelled(true);
 				else if (event.getDamager() instanceof Player) { //damage by player
 					//DAMAGER PLAYER HURTS PLAYER
 					event.setCancelled(true);
