@@ -8,10 +8,12 @@ class CheckTask implements Runnable {
 	
 	@Override
 	public void run() {
-		if(!plugin.times.isEmpty())
-			for(Object p : plugin.times.keySet().toArray()) //Not sure about the toArray, I think it fixes the concurrent modification?
-				try {
-					plugin.checkPlayer(plugin.getServer().getOfflinePlayer((String) p));
-				} catch (Exception e) {} //Exception should never happen, but... better safe than sorry :)
+		synchronized(plugin.times) {
+			if(!plugin.times.isEmpty())
+				for(String p : plugin.times.keySet())
+					try {
+						plugin.checkPlayer(plugin.getServer().getOfflinePlayer(p));
+					} catch (Exception e) {} //Exception should never happen, but... better safe than sorry :)
+		}
 	}
 }

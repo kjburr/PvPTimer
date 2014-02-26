@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -35,9 +36,14 @@ class PvPListener implements Listener {
 		config = plugin.config;
 	}
 	
+	public boolean checkWorld(EntityEvent event) {
+		return (event.getEntity() instanceof Player || event.getEntityType() == EntityType.PLAYER)
+				&& plugin.isWorldExcluded(event.getEntity().getWorld());
+	}
+	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPvP(EntityDamageByEntityEvent event) {
-		if ((event.getEntity() instanceof Player || event.getEntityType() == EntityType.PLAYER) && plugin.excludedWorlds.contains(event.getEntity().getWorld().getName())) return;
+		if (checkWorld(event)) return;
 		
 		if (event.getDamager() instanceof Player) {
 			//DAMAGER IS PLAYER
@@ -131,7 +137,7 @@ class PvPListener implements Listener {
 		
 		plugin.checkPlayer(p, false);
 		
-		if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < config.getTime(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p))))) {
+		if (!plugin.isProtected(p) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < config.getTime(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p))))) {
 			if (config.getTime(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p))) != 0) {
 				plugin.addPlayer(p, System.currentTimeMillis(), TimeItemType.RESPAWN);
 				p.sendMessage(plugin.prefix + plugin.lang("respawn", p.getName(), plugin.getTimeLeft(p)));

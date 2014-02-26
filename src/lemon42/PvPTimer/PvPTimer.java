@@ -492,7 +492,10 @@ public class PvPTimer extends JavaPlugin {
 	}
 	
 	public boolean isWorldExcluded(World w) {
-		return excludedWorlds.contains(w.getName());
+		return isWorldExcluded(w.getName());
+	}
+	public boolean isWorldExcluded(String w) {
+		return excludedWorlds.contains(w);
 	}
 	
 	File localFile(String f) {
