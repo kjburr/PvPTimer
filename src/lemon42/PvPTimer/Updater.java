@@ -40,7 +40,7 @@ public class Updater {
         			//Close dat stream
         			try {
         				is.close();
-        			} catch (IOException ioe) {}
+        			} catch (Exception e) {} //for null pointers!
         		}
         		
         		//Done! Print out something. :D
