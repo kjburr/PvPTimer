@@ -1,0 +1,51 @@
+#PvPTimer language file
+#Additional languages can be obtained from http://dev.bukkit.org/server-mods/pvptimer/pages/languages
+
+#Variables you can use:
+# %time%    - time left of protection
+# %user%    - the user involved
+# %count%   - the total number of protected users
+# %version% - PvPTimer's version number
+#Certain variables will not be available in all cases.
+#You may also use colors, in the format &[colorcode]
+
+revision: 2
+customFile: false
+author: upisfree
+prefix: '&9[PvPTimer] '
+cannotHurtWhileProtected: Ты не можешь ударять других игроков, пока у тебя есть защита! Напиши &b/pvptimer remove&9 или подожди &b%time%&9, чтобы активировать PvP и убрать свою защиту!
+cannotHurtOthers: Ты не можешь бить этого игрока!
+firstTime: Привет, %user%! Ты заходишь в первый раз и поэтому у тебя есть защита от PvP на &b%time%&9. Ты можешь отключить свою защиту в любое время написав &b/pvptimer remove&9.
+protected: Ты защищён PvPTimer'ом. Защита истечёт через &b%time%&9. Ты можешь отключить свою защиту в любое время написав &b/pvptimer remove&9.
+respawn: Ты перезашёл, и тебе была предоставлена защита на &b%time%&9. Ты можешь отключить свою защиту в любое время написав &b/pvptimer remove&9.
+teleport: Ты был телепортирован, и тебе была предоставлена защита на &b%time%&9. Ты можешь отключить свою защиту в любое время написав &b/pvptimer remove&9.
+worldChange: Ты поменял мир, и тебе была предоставлена защита на &b%time%&9. Ты можешь отключить свою защиту в любое время написав &b/pvptimer remove&9.
+noPickup: Ты не можешь подбирать предметы пока у тебя есть защита. Ты можешь отключить свою защиту в любое время написав &b/pvptimer remove&9.
+noContainer: Ты не можешь открывать сундуки пока у тебя есть защита. Ты можешь отключить свою защиту в любое время написав &b/pvptimer remove&9.
+protectionExpired: Твоя защита кончилась.
+protectionRemoved: Ты больше не защищён PvPTimer'ом!
+userProtectionRemoved: Игрок &b%user%&9 больше не охраняется PvPTimer'ом!
+protectionLeft: У тебя осталось защиты на &b%time%&9.
+userProtectionLeft: У &b%user%&9 есть защиты на &b%time%&9.
+protectionGranted: Ты отдал от своей защиты &b%time%&9 игроку &b%user%&9.
+protectionGrantedBy: Тебе предоставили защиты на &b%time%&9.
+protectionReset: Твоя защита была сброшена. Теперь у тебя &b%time%&9 защиты.
+protectionResetForAll: Защита сброшена для всех игроков онлайн.
+protectionInactiveHere: Ты отключил защиту для всего мира.
+protectionActiveAgain: Твоя защита снова активирована.
+updateAvailable: 'Доступно обновление! Скачай его здесь: &b%link%'
+errorPrefix: '&cОшибка: '
+playersOnly: Только игроки имеют право использовать эту команду.
+noPerms: У тебя нет прав, чтобы использовать эту команду.
+invalidArgs: Недопустимые аргументы. Напиши &4/pvptimer help&c для вывода всех команд.
+notProtected: Ты защищён!
+userNotProtected: Игрок &4%user%&c не защищён!
+playerNotFound: Игрок &4%user%&c не найден!
+hours: час.
+hour: час
+minutes: мин.
+minute: минута
+seconds: сек.
+second: секунда
+and: и
+#End of file
