@@ -104,7 +104,10 @@ public class PvPTimer extends JavaPlugin {
 		
 		//Save task
 		try {
-			getServer().getScheduler().runTaskTimerAsynchronously(this, new WriteTask(this), 0, parseTime(config.getString("saveEvery")) / 1000 * 20);
+			long interval = parseTime(config.getString("saveEvery"));
+			
+			if(interval != 0) //allows disabling autosave
+				getServer().getScheduler().runTaskTimerAsynchronously(this, new WriteTask(this), 0, interval / 1000 * 20);
 		} catch(IllegalArgumentException e) {
 			log.severe("/!\\ COULD NOT INITIALIZE SAVE THREAD! /!\\");
 		}
