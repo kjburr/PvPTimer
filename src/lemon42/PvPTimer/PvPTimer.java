@@ -97,14 +97,14 @@ public class PvPTimer extends JavaPlugin {
 		
 		//Check task
 		try {
-			getServer().getScheduler().runTaskTimerAsynchronously(this, new CheckTask(this), 0, parseTime(config.getString("checkEvery")) / 1000 * 20);
+			getServer().getScheduler().runTaskTimerAsynchronously(this, new CheckTask(this), 0, config.getTime("checkEvery") / 1000 * 20);
 		} catch(IllegalArgumentException e) {
 			log.severe("/!\\ COULD NOT INITIALIZE CHECK THREAD! THIS BREAKS THE PLUGIN! /!\\");
 		}
 		
 		//Save task
 		try {
-			long interval = parseTime(config.getString("saveEvery"));
+			long interval = config.getTime("saveEvery");
 			
 			if(interval != 0) //allows disabling autosave
 				getServer().getScheduler().runTaskTimerAsynchronously(this, new WriteTask(this), 0, interval / 1000 * 20);
@@ -363,7 +363,7 @@ public class PvPTimer extends JavaPlugin {
 					if(sender.hasPermission("PvPTimer.reset")) {
 						for(Player p : getServer().getOnlinePlayers()) {
 							addPlayer(p, System.currentTimeMillis(), TimeItemType.JOIN);
-							p.sendMessage(prefix + lang("protectionReset", parseTime(config.getString(TimeItemType.getConfigNode(TimeItemType.JOIN, getGroup(p))))));
+							p.sendMessage(prefix + lang("protectionReset", config.getTime(TimeItemType.getConfigNode(TimeItemType.JOIN, getGroup(p)))));
 						}
 						
 						sender.sendMessage(prefix + lang("protectionResetForAll"));
@@ -386,6 +386,7 @@ public class PvPTimer extends JavaPlugin {
 		if(time == null) return 0L;
 		//Example strings: 1h, 10m, 30s, 1h10m, 1h10m30s, 10m30s, etc.
 		time = time.toLowerCase().trim(); // Do some firt time checks.
+		if(time == "0") return 0L;
 		//Variables to hold values ;D
 		Long hours = 0L, minutes = 0L, seconds = 0L;
 		String curVal;
@@ -445,7 +446,7 @@ public class PvPTimer extends JavaPlugin {
 	//API STUFF 
 	public void addPlayer(Player p, Long timeStamp, TimeItemType type) {
 		if(p == null) return;
-		times.put(p.getName(), new TimeItem(timeStamp + parseTime(config.getString(TimeItemType.getConfigNode(type, getGroup(p)))), type));
+		times.put(p.getName(), new TimeItem(timeStamp + config.getTime(TimeItemType.getConfigNode(type, getGroup(p))), type));
 	}
 	
 	public void checkPlayer(OfflinePlayer p) {

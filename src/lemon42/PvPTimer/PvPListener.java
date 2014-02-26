@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 class PvPListener implements Listener {
 	PvPTimer plugin;
@@ -92,14 +93,27 @@ class PvPListener implements Listener {
 		plugin.checkPlayer(p, false);
 		//plugin.log.info("Player " + p.getName() + " timestamp is " +p.getFirstPlayed() + ", current timestamp is " + System.currentTimeMillis() + ", diff is " + (System.currentTimeMillis() - p.getFirstPlayed()));
 		if ((System.currentTimeMillis() - p.getFirstPlayed()) <= 2000 && !plugin.times.containsKey(p.getName())) { //New player... woo.
-			if(PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.FIRSTJOIN, plugin.getGroup(event.getPlayer())))) == 0) return;
+			if(config.getTime(TimeItemType.getConfigNode(TimeItemType.FIRSTJOIN, plugin.getGroup(event.getPlayer()))) == 0) return;
 			
 			plugin.addPlayer(p, p.getFirstPlayed(), TimeItemType.FIRSTJOIN);
-			p.sendMessage(plugin.prefix + plugin.lang("firstTime", p.getName(), PvPTimer.parseTime(config.getString("timeAmounts.newPlayers"))));
-		} else {
-			if(PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(event.getPlayer())))) == 0) return;
 			
-			if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(p)))))) {
+			//Handles join message delay
+			new BukkitRunnable() {
+				Player p;
+				public BukkitRunnable init(Player player) {
+					p = player;
+					return this;
+				}
+				
+	            @Override
+	            public void run() {
+	            	p.sendMessage(plugin.prefix + plugin.lang("firstTime", p.getName(), config.getTime("timeAmounts.newPlayers")));
+	            }	 
+	        }.init(p).runTaskLater(this.plugin, config.getTime("joinMessageDelay") / 1000 * 20);
+		} else {
+			if(config.getTime(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(event.getPlayer()))) == 0) return;
+			
+			if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < config.getTime(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(p))))) {
 				plugin.addPlayer(p, System.currentTimeMillis(), TimeItemType.JOIN);
 			}
 			
@@ -117,8 +131,8 @@ class PvPListener implements Listener {
 		
 		plugin.checkPlayer(p, false);
 		
-		if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p)))))) {
-			if (PvPTimer.parseTime(config.getString(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p)))) != 0) {
+		if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < config.getTime(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p))))) {
+			if (config.getTime(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p))) != 0) {
 				plugin.addPlayer(p, System.currentTimeMillis(), TimeItemType.RESPAWN);
 				p.sendMessage(plugin.prefix + plugin.lang("respawn", p.getName(), plugin.getTimeLeft(p)));
 			}
@@ -129,7 +143,7 @@ class PvPListener implements Listener {
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onTeleport(PlayerTeleportEvent event) {		
-		if (PvPTimer.parseTime(config.getString(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(event.getPlayer())))) != 0) {
+		if (config.getTime(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(event.getPlayer()))) != 0) {
 			Player p = event.getPlayer();
 			
 			//Fixes world to different world teleport
@@ -137,7 +151,7 @@ class PvPListener implements Listener {
 			
 			plugin.checkPlayer(p, false);
 			
-			if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(p)))))) {
+			if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < config.getTime(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(p))))) {
 				
 				//Less than 5 blocks away :P
 				if (event.getFrom().distanceSquared(event.getTo()) <= 25) return;
@@ -162,7 +176,7 @@ class PvPListener implements Listener {
 				if (plugin.isWorldExcluded(event.getFrom()))
 					p.sendMessage(plugin.prefix + plugin.lang("protectionActiveAgain", p.getName(), plugin.getTimeLeft(p)));
 			} else {
-				if (PvPTimer.parseTime(config.getString(TimeItemType.getConfigNode(TimeItemType.WORLDCHANGE, plugin.getGroup(event.getPlayer())) + w)) != 0) {
+				if (config.getTime(TimeItemType.getConfigNode(TimeItemType.WORLDCHANGE, plugin.getGroup(event.getPlayer())) + w) != 0) {
 					plugin.addPlayer(p, System.currentTimeMillis(), TimeItemType.WORLDCHANGE);
 					p.sendMessage(plugin.prefix + plugin.lang("worldChange", p.getName(), plugin.getTimeLeft(p)));
 				}

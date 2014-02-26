@@ -37,6 +37,10 @@ checkEvery: 10s
 #High intervals are recommended, as saving isn't required to be done very often.
 saveEvery: 30m
 
+#Allows you to delay the join message a bit so players can see it after the clutter
+#Set to 0 to show instantly!
+joinMessageDelay: 5s
+
 #Exclude specific worlds from any protection.
 excludedWorlds: [world_excluded1, world_excluded2]
 
@@ -61,7 +65,7 @@ checkForUpdates: true
 
 #DO NOT ALTER THESE VALUES! It will screw up your configuration!
 #This helps the plugin migrate configurations when updating PvPTimer
-revision: 2
+revision: 3
 migratedFrom: -1
 
 #Thanks for using PvPTimer :)

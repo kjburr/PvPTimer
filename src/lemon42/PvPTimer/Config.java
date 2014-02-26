@@ -223,4 +223,8 @@ class Config {
 	public boolean getBoolean(String path) {
 		return config.getBoolean(path);
 	}
+	public Long getTime(String path) {
+		if(!contains(path)) return 0L;
+		return PvPTimer.parseTime(config.getString(path));
+	}
 }
