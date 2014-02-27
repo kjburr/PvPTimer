@@ -9,7 +9,7 @@
 #Certain variables will not be available in all cases.
 #You may also use colors, in the format &[colorcode]
 
-revision: 2
+revision: 3
 customFile: false
 author: ChopDonut7
 prefix: '&9[PvPTimer] '
@@ -34,6 +34,9 @@ protectionResetForAll: Beskyttelsen ble nullstilt for alle online spillere.
 protectionInactiveHere: Du har endret til verden hvor beskyttelsen er deaktivert.
 protectionActiveAgain: Beskyttelsen er aktiv.
 updateAvailable: 'En oppdatering er tilgjengelig! Last den ned her: &b%link%'
+timedOut: Du er nå i et tidsavbrudd for &b%time%&9, du vil ikke lenger være i stand til å få beskyttelse i løpet av denne perioden.
+notTimedOut: Tidsavbruddet er over.
+checkTimeout: Du er i et tidsavbrudd. Beskyttelsen er tilgjengelig om &b%time%&9.
 errorPrefix: '&cError: '
 playersOnly: Kun spillere kan bruke denne kommandoen.
 noPerms: Du har ikke tillatelse til å bruke denne kommandoen.

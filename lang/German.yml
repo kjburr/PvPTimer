@@ -9,7 +9,7 @@
 #Certain variables will not be available in all cases.
 #You may also use colors, in the format &[colorcode]
 
-revision: 2
+revision: 3
 customFile: false
 author: H8llfire
 prefix: '&9[PvPTimer] '
@@ -34,6 +34,9 @@ protectionResetForAll: PvP Schutz fuer alle Spieler zurueckgesetzt.
 protectionInactiveHere: Du bist in einer Welt in der du nicht geschuetzt bist.
 protectionActiveAgain: Dein Schutz ist nun wieder aktiv.
 updateAvailable: 'Ein Update ist verfuegbar! Bekomme es hier: &b%link%'
+timedOut: Du bist nun in einer Auszeit fuer &b%time%&9, in dieser Zeit kannst du keinen Schutz kriegen.
+notTimedOut: Du bist nicht mehr in einer Auszeit.
+checkTimeout: Du bist in einer Auszeit. Du kannst fuer &b%time%&9 keinen weiteren Schutz kriegen.
 errorPrefix: '&cFehler: '
 playersOnly: Nur Spieler koennen dies benutzen.
 noPerms: Du hast keine Rechte fuer dieses Kommando.

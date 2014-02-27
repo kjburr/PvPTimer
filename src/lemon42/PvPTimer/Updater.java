@@ -1,20 +1,29 @@
 package lemon42.PvPTimer;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 
 public class Updater {
 	//http://api.bukget.org/3/plugins/bukkit/pvptimer/latest?fields=versions.version,versions.download,versions.link,versions.type,versions.md5
 	private boolean updateNeeded = false;
 	private PvPTimer plugin;
-	private String version,
-			link,
-			type;
+	private String version, link;
 	
 	public Updater(PvPTimer instance) {
 		plugin = instance;
+	}
+	
+	private static String streamToString(InputStream is) {
+	    java.util.Scanner s = new java.util.Scanner(is);
+	    s.useDelimiter("\\A");
+	    
+	    String str = "";
+	    while(s.hasNext())
+	    	str += s.next();
+	    
+	    s.close();
+	    
+	    return str;
 	}
 	
 	public void check() {
@@ -24,14 +33,16 @@ public class Updater {
             	InputStream is = null;
         		try {
         			//Get only the info we need.
-        			is = new URL("http://api.bukget.org/3/plugins/bukkit/pvptimer/latest?fields=versions.version,versions.link,versions.type").openStream();
-        			String json = new BufferedReader(new InputStreamReader(is)).readLine();
-
-        			version = getKey(json, "version");
-        			link = shorten(getKey(json, "link"));
-        			type = getKey(json, "type");
+        			is = new URL("http://dev.bukkit.org/bukkit-plugins/pvptimer/files.rss").openStream();
+        			String rss = streamToString(is);
+        		    rss = rss.substring(rss.indexOf("<item>"));
+        			
+        			version = getKey(rss, "title").replace("PvPTimer ", "");
+        			link = shorten(getKey(rss, "link"));
 
         			updateNeeded = isVersionNewer(version);
+        			
+        			plugin.log.info(" >> " + link + " >> " + version);
         		} catch (Exception e) {
         			//Exception D:
         			updateNeeded = false;
@@ -50,11 +61,11 @@ public class Updater {
 	
 	//Creates a shorter BukkitDev file link.
 	private String shorten(String link) {
-		return "http://dev.bukkit.org/server-mods/pvptimer/files/" + inBetween(link, "files/", "-");
+		return "http://dev.bukkit.org/bukkit-plugins/pvptimer/files/" + inBetween(link, "files/", "-");
 	}
-	//I know this isn't how you get a JSON key, however it works for this output.
-	private String getKey(String json, String key) {
-		return inBetween(json, "\"" + key + "\": \"", "\"");
+	
+	private String getKey(String src, String key) {
+		return inBetween(src, "<" + key + ">", "</" + key + ">");
 	}
 	private String inBetween(String str, String before, String after) {
 		if (str == null || before == null || after == null || str == "" || before == "" || after == "" || !(str.contains(before) || str.contains(after))) return "";
@@ -94,8 +105,5 @@ public class Updater {
 	}
 	public String getLink() {
 		return link;
-	}
-	public String getType() {
-		return type;
 	}
 }
