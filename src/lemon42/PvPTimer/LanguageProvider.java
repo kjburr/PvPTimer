@@ -22,7 +22,7 @@ class LanguageProvider {
 	public LanguageProvider(PvPTimer instance) {
 		//constructor
 		plugin = instance;
-		def = YamlConfiguration.loadConfiguration(plugin.getResource("lang/English.yml"));
+		def = YamlConfiguration.loadConfiguration(getClass().getResourceAsStream("/lang/English.yml"));
 	}
 
 	public void saveDefault() {
@@ -53,12 +53,12 @@ class LanguageProvider {
 		}
 		
 		//Load.
-		if(inJar) lang = YamlConfiguration.loadConfiguration(plugin.getResource(localeFile + ".yml"));
+		if(inJar) lang = YamlConfiguration.loadConfiguration(getClass().getResourceAsStream("/lang/" + localeFile + ".yml"));
 		else lang = YamlConfiguration.loadConfiguration(f);
 		try {
-			def = YamlConfiguration.loadConfiguration(plugin.getResource(localeFile + ".yml"));
+			def = YamlConfiguration.loadConfiguration(getClass().getResourceAsStream("/lang/" + localeFile + ".yml"));
 		} catch(Exception e) {
-			def = YamlConfiguration.loadConfiguration(plugin.getResource("English.yml"));
+			def = YamlConfiguration.loadConfiguration(getClass().getResourceAsStream("/lang/English.yml"));
 		}
 		
 		if(lang.contains("revision") && lang.contains("customFile")) {
