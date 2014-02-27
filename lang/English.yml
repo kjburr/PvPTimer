@@ -9,9 +9,10 @@
 #Certain variables will not be available in all cases.
 #You may also use colors, in the format &[colorcode]
 
-revision: 2
+revision: 3
 customFile: false
 author: lemon42
+
 prefix: '&9[PvPTimer] '
 cannotHurtWhileProtected: You cannot hurt other players while protected! Type &b/pvptimer remove&9 or wait &b%time%&9 to be able to PvP!
 cannotHurtOthers: You cannot hurt this player!
@@ -34,6 +35,9 @@ protectionResetForAll: Protection reset for all online players.
 protectionInactiveHere: You have changed to a world where protection has been disabled.
 protectionActiveAgain: Your protection is now active again.
 updateAvailable: 'An update is available! Download it here: &b%link%'
+timedOut: You are now in timeout for &b%time%&9, you will no longer be able to get protected during this period.
+notTimedOut: You are no longer in timeout.
+checkTimeout: You are in timeout. You will not be able to be protected for another &b%time%&9.
 
 errorPrefix: '&cError: '
 playersOnly: Only players may use this command.
@@ -49,4 +53,5 @@ minute: minute
 seconds: seconds
 second: second
 and: and
+
 #End of file

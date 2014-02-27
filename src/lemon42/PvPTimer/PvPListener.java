@@ -53,12 +53,13 @@ class PvPListener implements Listener {
 	public void onPvP(EntityDamageByEntityEvent event) {
 		if (checkWorld(event)) return;
 		
+
 		if (event.getDamager() instanceof Player) {
 			//DAMAGER IS PLAYER
 			Player damager = (Player)event.getDamager();
 			if (plugin.isProtected(damager)) {
 				if (event.getEntity() instanceof Player) {
-					//DAMAGER PROTECTED HITS OTHER PLAYER
+					//DAMAGER PROTECTED HITS PLAYER		
 					event.setCancelled(true);
 					damager.sendMessage(plugin.prefix + plugin.lang("cannotHurtWhileProtected", plugin.getTimeLeft((Player)event.getEntity())));
 				}
@@ -69,6 +70,12 @@ class PvPListener implements Listener {
 			if (shooter instanceof Player && event.getEntity() instanceof Player) {
 				//DAMAGER IS PLAYER - HURT IS PLAYER
 				Player pShooter = (Player)shooter;
+				
+				if(pShooter.getName().equals(((Player)event.getEntity()).getName())) {
+					//same player => enderpearl!
+					return;
+				}
+				
 				if (plugin.isProtected(pShooter)) {
 					//DAMAGER PROTECTED HITS OTHER PLAYER (PROJECTILE)
 					event.setCancelled(true);
@@ -104,8 +111,11 @@ class PvPListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onJoin(PlayerJoinEvent event) {
 		if (checkWorld(event)) return;
+		
 				
 		Player p = event.getPlayer();
+		
+		if(plugin.isTimeout(p)) return;
 		plugin.checkPlayer(p, false);
 		//plugin.log.info("Player " + p.getName() + " timestamp is " +p.getFirstPlayed() + ", current timestamp is " + System.currentTimeMillis() + ", diff is " + (System.currentTimeMillis() - p.getFirstPlayed()));
 		if ((System.currentTimeMillis() - p.getFirstPlayed()) <= 2000 && !plugin.times.containsKey(p.getName())) { //New player... woo.
@@ -146,6 +156,7 @@ class PvPListener implements Listener {
 		if (checkWorld(event)) return;
 		
 		Player p = event.getPlayer();
+		if(plugin.isTimeout(p)) return;
 		plugin.checkPlayer(p, false);
 		
 		//suicide protection + other entities
@@ -171,6 +182,7 @@ class PvPListener implements Listener {
 		
 		if (config.getTime(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(event.getPlayer()))) != 0) {
 			Player p = event.getPlayer();
+			if(plugin.isTimeout(p)) return;
 			
 			//Already handled by other event
 			if(event.getFrom().getWorld() != event.getTo().getWorld()) return;
@@ -203,6 +215,8 @@ class PvPListener implements Listener {
 				if (plugin.isWorldExcluded(event.getFrom()))
 					p.sendMessage(plugin.prefix + plugin.lang("protectionActiveAgain", p.getName(), plugin.getTimeLeft(p)));
 			} else {
+				if(plugin.isTimeout(p)) return;
+				
 				if (config.getTime(TimeItemType.getConfigNode(TimeItemType.WORLDCHANGE, plugin.getGroup(event.getPlayer())) + w) != 0) {
 					plugin.addPlayer(p, System.currentTimeMillis(), TimeItemType.WORLDCHANGE);
 					p.sendMessage(plugin.prefix + plugin.lang("worldChange", p.getName(), plugin.getTimeLeft(p)));

@@ -9,7 +9,7 @@
 #Sommige variabelen zijn niet altijd beschikbaar.
 #kleuren kunnen ook gebruikt worden, in het format: &[kleurcode]
 
-revision: 2
+revision: 3
 customFile: false
 author: Neptuner
 prefix: '&9[PvPTimer] '
@@ -34,6 +34,10 @@ protectionResetForAll: PVP bescherming gereset voor alle online spelers.
 protectionInactiveHere: Je bent nu in een wereld waar geen PVP bescherming is.
 protectionActiveAgain: De PVP bescherming is nu weer actief.
 updateAvailable: 'Een update is beschikbaar! Download het hier: &b%link%'
+timedOut: Je zit nu in een time-out voor &b%time%&9, je krijgt geen bescherming in deze periode.
+notTimedOut: Je zit niet langer in een time-out.
+checkTimeout: Je zit in een time-out. Je kan niet beschermd worden voor &b%time%&9.
+
 errorPrefix: '&cError: '
 playersOnly: Alleen spelers mogen dit commando gebruiken.
 noPerms: Je hebt geen toestemming om dit commando te gebruiken.

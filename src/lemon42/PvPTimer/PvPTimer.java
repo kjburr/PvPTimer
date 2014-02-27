@@ -99,7 +99,7 @@ public class PvPTimer extends JavaPlugin {
 		try {
 			getServer().getScheduler().runTaskTimerAsynchronously(this, new CheckTask(this), 0, config.getTime("checkEvery") / 1000 * 20);
 		} catch(IllegalArgumentException e) {
-			log.severe("/!\\ COULD NOT INITIALIZE CHECK THREAD! THIS BREAKS THE PLUGIN! /!\\");
+			log.severe("/!\\ COULD NOT INITIALIZE CHECK THREAD! THIS BREAKS THE PLUGIN! /!\\"); //wat
 		}
 		
 		//Save task
@@ -253,6 +253,8 @@ public class PvPTimer extends JavaPlugin {
 					if(player != null) {
 						if (isProtected(player)) {
 							player.sendMessage(prefix + lang("protectionLeft", player.getName(), getTimeLeft(player)));
+						} else if(isTimeout(player)) {
+							player.sendMessage(prefix + lang("checkTimeout", player.getName(), getTimeLeft(player)));
 						} else player.sendMessage(notProtected);
 					} else sender.sendMessage(errorArgs);
 				} else if(args.length == 2) {
@@ -446,7 +448,10 @@ public class PvPTimer extends JavaPlugin {
 	//API STUFF 
 	public void addPlayer(Player p, Long timeStamp, TimeItemType type) {
 		if(p == null) return;
-		times.put(p.getName(), new TimeItem(timeStamp + config.getTime(TimeItemType.getConfigNode(type, getGroup(p))), type));
+		long time = config.getTime(TimeItemType.getConfigNode(type, getGroup(p)));
+		if(time == 0) return;
+		
+		times.put(p.getName(), new TimeItem(timeStamp + time, type));
 	}
 	
 	public void checkPlayer(OfflinePlayer p) {
@@ -455,7 +460,11 @@ public class PvPTimer extends JavaPlugin {
 			return;
 		}
 		String name = p.getName();
-		if (times.containsKey(name)) if (times.get(name).getEndTime() <= System.currentTimeMillis()) times.remove(name);
+		if (times.containsKey(name))
+			if (times.get(name).getEndTime() <= System.currentTimeMillis()) {
+				times.remove(name);
+				//Add timeout when not.... online? 3:
+			}
 	}
 	public void checkPlayer(Player p) {
 		checkPlayer(p, true);
@@ -468,14 +477,23 @@ public class PvPTimer extends JavaPlugin {
 		String name = p.getName();
 		if (times.containsKey(name)) {
 			if (times.get(name).getEndTime() <= System.currentTimeMillis()) {
-				times.remove(name);
-				if(send) p.sendMessage(prefix + lang("protectionExpired"));
+				if(times.get(name).getType() != TimeItemType.TIMEOUT) {
+					if(send) p.sendMessage(prefix + lang("protectionExpired"));
+					
+					addPlayer(p, System.currentTimeMillis(), TimeItemType.TIMEOUT);
+					p.sendMessage(prefix + lang("timedOut", p.getName(), getTimeLeft(p)));
+				} else {
+					//remove timeout
+					times.remove(name);
+					p.sendMessage(prefix + lang("notTimedOut", p.getName(), getTimeLeft(p)));
+				}
 			}
 		}
 	}
 	
 	public Long getTimeLeft(OfflinePlayer p) {
-		if(isProtected(p)) return times.get(p.getName()).getEndTime() - System.currentTimeMillis();
+		//the OR fixes timeout :)
+		if(isProtected(p) || times.containsKey(p.getName())) return times.get(p.getName()).getEndTime() - System.currentTimeMillis();
 		return 0L;
 	}
 	public Long getTimeLeft(Player p) {
@@ -484,11 +502,19 @@ public class PvPTimer extends JavaPlugin {
 	
 	public boolean isProtected(OfflinePlayer p) {
 		checkPlayer(p);
-		return times.containsKey(p.getName());
+		return times.containsKey(p.getName()) && times.get(p.getName()).getType() != TimeItemType.TIMEOUT;
 	}
 	public boolean isProtected(Player p) {
 		checkPlayer(p);
-		return times.containsKey(p.getName());
+		return times.containsKey(p.getName()) && times.get(p.getName()).getType() != TimeItemType.TIMEOUT;
+	}
+	public boolean isTimeout(OfflinePlayer p) {
+		checkPlayer(p);
+		return times.containsKey(p.getName()) && times.get(p.getName()).getType() == TimeItemType.TIMEOUT;
+	}
+	public boolean isTimeout(Player p) {
+		checkPlayer(p);
+		return times.containsKey(p.getName()) && times.get(p.getName()).getType() == TimeItemType.TIMEOUT;
 	}
 	
 	public boolean isWorldExcluded(World w) {

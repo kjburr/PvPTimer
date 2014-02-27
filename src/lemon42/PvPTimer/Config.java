@@ -68,6 +68,11 @@ class Config {
 					if(paths.contains(key) && key != "revision") curConfig.set(key, config.get(key));
 
 			//2) Migrate values from old revisions
+			
+			//rev 1 > base
+			//rev 2 > excludedWorlds; timeamounts with groups
+			//rev 3 > allowEnderpearl, allowNonPlayerDeath, joinMessageDelay
+			//        timeAmounts.timeout
 			if(rev == -1) {				
 				//Before new config was introduced			
 				if(paths.contains("config.timeAmount") && paths.contains("config.timeMeasure")) {
@@ -105,6 +110,8 @@ class Config {
 						if(PvPTimer.parseTime(amount + type.substring(0, 1)) != null)
 							curConfig.set("timeAmounts.newPlayers", "" + amount + type.substring(0, 1).toLowerCase());
 				}
+			} else if(rev == 2) {
+				//only new keys in 3
 			}
 			
 			curConfig.set("migratedFrom", rev);

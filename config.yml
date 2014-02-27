@@ -10,12 +10,14 @@ language: 'English'
 
 #Time amount to protect players on first join, respawn, consecutive joins, and teleport.
 #Set any to 0 to disable the protection for that type.
+#Timeout -> amount of time in which they cannot receive new protections, starts when any protection expires
 timeAmounts:
     newPlayers: 10m
     default:
         respawn: 30s
         join: 30s
         teleport: 10s
+        timeout: 20s
         worldChange:
             defaultValue: 10s
             world: 20s
@@ -24,6 +26,7 @@ timeAmounts:
         respawn: 1m
         join: 1m
         teleport: 20s
+        timeout: 0s
         worldChange:
             defaultValue: 20s
             world: 1m
