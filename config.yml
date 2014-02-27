@@ -57,6 +57,8 @@ allowContainer: true
 
 #Wether or not to protect when using enderpearls to teleport
 allowEnderpearl: false
+#Wether or not to protect when death was not caused by a player
+allowNonPlayerDeath: true
 
 #Help this plugin by sending anonymous stats to MCStats.
 #Note that if the main Metrics settings are disabled then this will not take effect.

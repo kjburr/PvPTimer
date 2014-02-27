@@ -140,13 +140,17 @@ class PvPListener implements Listener {
 		if(plugin.updater.isUpdateNeeded() && p.hasPermission("PvPTimer.updateNotify"))
 			p.sendMessage(plugin.prefix + plugin.lang("updateAvailable").replace("%link%", plugin.updater.getLink()));
 	}
-	
+
 	@EventHandler(ignoreCancelled = true)
 	public void onRespawn(PlayerRespawnEvent event) {
 		if (checkWorld(event)) return;
 		
 		Player p = event.getPlayer();
 		plugin.checkPlayer(p, false);
+		
+		//suicide protection + other entities
+		if(!config.getBoolean("allowNonPlayerDeath"))
+			if(p.getKiller() == null || p.getKiller() == p) return;
 		
 		if (!plugin.isProtected(p) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < config.getTime(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p))))) {
 			if (config.getTime(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p))) != 0) {
