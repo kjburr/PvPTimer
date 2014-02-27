@@ -225,21 +225,22 @@ public class PvPTimer extends JavaPlugin {
 				if(sender.hasPermission("PvPTimer.reset")) sender.sendMessage(ChatColor.RED + "/pvptimer reset" + ChatColor.WHITE + " - resets protection for all online players");
 				if(sender.hasPermission("PvPTimer.reload")) sender.sendMessage(ChatColor.RED + "/pvptimer reload" + ChatColor.WHITE + " - reloads the plugin");
 				sender.sendMessage(ChatColor.BLUE + "Plugin by lemon42 - http://dev.bukkit.org/profiles/lemon42");
-				//sender.sendMessage(ChatColor.BLUE + "Made for KoM - http://KingsOfMinecraft.com/");
 			} else if (args[0].equalsIgnoreCase("remove")) {
 				if(args.length == 1) {
 					//Self remove
 					if(player != null) {
-						if (times.containsKey(player.getName())) {
-							times.remove(player.getName());
-							player.sendMessage(prefix + lang("protectionRemoved"));
-						} else player.sendMessage(notProtected);
+						if(player.hasPermission("PvPTimer.remove")) {
+							if (isProtected(player)) {
+								times.remove(player.getName());
+								player.sendMessage(prefix + lang("protectionRemoved"));
+							} else player.sendMessage(notProtected);
+						} else sender.sendMessage(errorPerms);
 					} else sender.sendMessage(errorArgs);
 				} else if(args.length == 2) {
 					//Admin
 					if(sender.hasPermission("PvPTimer.removeOthers")) {
 						OfflinePlayer p = getServer().getOfflinePlayer(args[1]);
-						if(times.containsKey(p.getName())) {
+						if(isProtected(p)) {
 							times.remove(p.getName());
 							if(p.isOnline()) p.getPlayer().sendMessage(prefix + lang("protectionRemoved"));
 							sender.sendMessage(prefix + lang("userProtectionRemoved", p.getName()));
@@ -250,10 +251,8 @@ public class PvPTimer extends JavaPlugin {
 				if(args.length == 1) {
 					//Self check
 					if(player != null) {
-						if (times.containsKey(player.getName())) {
-							checkPlayer(player);
-							if (times.containsKey(player.getName())) player.sendMessage(prefix + lang("protectionLeft", player.getName(), getTimeLeft(player)));
-							else player.sendMessage(notProtected);
+						if (isProtected(player)) {
+							player.sendMessage(prefix + lang("protectionLeft", player.getName(), getTimeLeft(player)));
 						} else player.sendMessage(notProtected);
 					} else sender.sendMessage(errorArgs);
 				} else if(args.length == 2) {
@@ -261,10 +260,8 @@ public class PvPTimer extends JavaPlugin {
 					if(sender.hasPermission("PvPTimer.checkOthers")) {
 						OfflinePlayer p = getServer().getOfflinePlayer(args[1]);
 						
-						if(times.containsKey(p.getName())) {
-							checkPlayer(p);
-							if (times.containsKey(p.getName())) sender.sendMessage(prefix + lang("userProtectionLeft", p.getName(), getTimeLeft(p)));
-							else sender.sendMessage(errorPrefix + lang("userNotProtected", p.getName()));
+						if(isProtected(p)) {
+							sender.sendMessage(prefix + lang("userProtectionLeft", p.getName(), getTimeLeft(p)));
 						} else sender.sendMessage(errorPrefix + lang("userNotProtected", p.getName()));
 					} else sender.sendMessage(errorPerms);
 				} else sender.sendMessage(errorArgs);
@@ -321,6 +318,9 @@ public class PvPTimer extends JavaPlugin {
 						
 						//5) Vault
 						loadVault();
+						
+						//6) Check for updates
+						if(config.getBoolean("checkForUpdates")) updater.check();
 						
 						//Done!
 						if(!error) {
