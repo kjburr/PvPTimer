@@ -16,6 +16,9 @@ permissions:
     PvPTimer.reload:
         description: Reloads the plugin
         default: op
+    PvPTimer.remove:
+        description: Remove your own protection
+        default: true
     PvPTimer.removeOthers:
         description: Remove other people's protection
         default: op

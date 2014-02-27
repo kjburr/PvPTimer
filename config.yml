@@ -55,6 +55,9 @@ allowPickup: true
 #Allows using containers while protected
 allowContainer: true
 
+#Wether or not to protect when using enderpearls to teleport
+allowEnderpearl: false
+
 #Help this plugin by sending anonymous stats to MCStats.
 #Note that if the main Metrics settings are disabled then this will not take effect.
 #Gathered stats are publicly available at http://mcstats.org/plugin/PvPTimer
