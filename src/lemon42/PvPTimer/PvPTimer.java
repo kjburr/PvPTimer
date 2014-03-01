@@ -97,14 +97,17 @@ public class PvPTimer extends JavaPlugin {
 		
 		//Check task
 		try {
-			getServer().getScheduler().runTaskTimerAsynchronously(this, new CheckTask(this), 0, parseTime(config.getString("checkEvery")) / 1000 * 20);
+			getServer().getScheduler().runTaskTimerAsynchronously(this, new CheckTask(this), 0, config.getTime("checkEvery") / 1000 * 20);
 		} catch(IllegalArgumentException e) {
-			log.severe("/!\\ COULD NOT INITIALIZE CHECK THREAD! THIS BREAKS THE PLUGIN! /!\\");
+			log.severe("/!\\ COULD NOT INITIALIZE CHECK THREAD! THIS BREAKS THE PLUGIN! /!\\"); //wat
 		}
 		
 		//Save task
 		try {
-			getServer().getScheduler().runTaskTimerAsynchronously(this, new WriteTask(this), 0, parseTime(config.getString("saveEvery")) / 1000 * 20);
+			long interval = config.getTime("saveEvery");
+			
+			if(interval != 0) //allows disabling autosave
+				getServer().getScheduler().runTaskTimerAsynchronously(this, new WriteTask(this), 0, interval / 1000 * 20);
 		} catch(IllegalArgumentException e) {
 			log.severe("/!\\ COULD NOT INITIALIZE SAVE THREAD! /!\\");
 		}
@@ -222,21 +225,22 @@ public class PvPTimer extends JavaPlugin {
 				if(sender.hasPermission("PvPTimer.reset")) sender.sendMessage(ChatColor.RED + "/pvptimer reset" + ChatColor.WHITE + " - resets protection for all online players");
 				if(sender.hasPermission("PvPTimer.reload")) sender.sendMessage(ChatColor.RED + "/pvptimer reload" + ChatColor.WHITE + " - reloads the plugin");
 				sender.sendMessage(ChatColor.BLUE + "Plugin by lemon42 - http://dev.bukkit.org/profiles/lemon42");
-				//sender.sendMessage(ChatColor.BLUE + "Made for KoM - http://KingsOfMinecraft.com/");
 			} else if (args[0].equalsIgnoreCase("remove")) {
 				if(args.length == 1) {
 					//Self remove
 					if(player != null) {
-						if (times.containsKey(player.getName())) {
-							times.remove(player.getName());
-							player.sendMessage(prefix + lang("protectionRemoved"));
-						} else player.sendMessage(notProtected);
+						if(player.hasPermission("PvPTimer.remove")) {
+							if (isProtected(player)) {
+								times.remove(player.getName());
+								player.sendMessage(prefix + lang("protectionRemoved"));
+							} else player.sendMessage(notProtected);
+						} else sender.sendMessage(errorPerms);
 					} else sender.sendMessage(errorArgs);
 				} else if(args.length == 2) {
 					//Admin
 					if(sender.hasPermission("PvPTimer.removeOthers")) {
 						OfflinePlayer p = getServer().getOfflinePlayer(args[1]);
-						if(times.containsKey(p.getName())) {
+						if(isProtected(p)) {
 							times.remove(p.getName());
 							if(p.isOnline()) p.getPlayer().sendMessage(prefix + lang("protectionRemoved"));
 							sender.sendMessage(prefix + lang("userProtectionRemoved", p.getName()));
@@ -247,10 +251,10 @@ public class PvPTimer extends JavaPlugin {
 				if(args.length == 1) {
 					//Self check
 					if(player != null) {
-						if (times.containsKey(player.getName())) {
-							checkPlayer(player);
-							if (times.containsKey(player.getName())) player.sendMessage(prefix + lang("protectionLeft", player.getName(), getTimeLeft(player)));
-							else player.sendMessage(notProtected);
+						if (isProtected(player)) {
+							player.sendMessage(prefix + lang("protectionLeft", player.getName(), getTimeLeft(player)));
+						} else if(isTimeout(player)) {
+							player.sendMessage(prefix + lang("checkTimeout", player.getName(), getTimeLeft(player)));
 						} else player.sendMessage(notProtected);
 					} else sender.sendMessage(errorArgs);
 				} else if(args.length == 2) {
@@ -258,10 +262,8 @@ public class PvPTimer extends JavaPlugin {
 					if(sender.hasPermission("PvPTimer.checkOthers")) {
 						OfflinePlayer p = getServer().getOfflinePlayer(args[1]);
 						
-						if(times.containsKey(p.getName())) {
-							checkPlayer(p);
-							if (times.containsKey(p.getName())) sender.sendMessage(prefix + lang("userProtectionLeft", p.getName(), getTimeLeft(p)));
-							else sender.sendMessage(errorPrefix + lang("userNotProtected", p.getName()));
+						if(isProtected(p)) {
+							sender.sendMessage(prefix + lang("userProtectionLeft", p.getName(), getTimeLeft(p)));
 						} else sender.sendMessage(errorPrefix + lang("userNotProtected", p.getName()));
 					} else sender.sendMessage(errorPerms);
 				} else sender.sendMessage(errorArgs);
@@ -319,6 +321,9 @@ public class PvPTimer extends JavaPlugin {
 						//5) Vault
 						loadVault();
 						
+						//6) Check for updates
+						if(config.getBoolean("checkForUpdates")) updater.check();
+						
 						//Done!
 						if(!error) {
 							sender.sendMessage(prefix + "Plugin reloaded.");
@@ -360,7 +365,7 @@ public class PvPTimer extends JavaPlugin {
 					if(sender.hasPermission("PvPTimer.reset")) {
 						for(Player p : getServer().getOnlinePlayers()) {
 							addPlayer(p, System.currentTimeMillis(), TimeItemType.JOIN);
-							p.sendMessage(prefix + lang("protectionReset", parseTime(config.getString(TimeItemType.getConfigNode(TimeItemType.JOIN, getGroup(p))))));
+							p.sendMessage(prefix + lang("protectionReset", config.getTime(TimeItemType.getConfigNode(TimeItemType.JOIN, getGroup(p)))));
 						}
 						
 						sender.sendMessage(prefix + lang("protectionResetForAll"));
@@ -383,6 +388,7 @@ public class PvPTimer extends JavaPlugin {
 		if(time == null) return 0L;
 		//Example strings: 1h, 10m, 30s, 1h10m, 1h10m30s, 10m30s, etc.
 		time = time.toLowerCase().trim(); // Do some firt time checks.
+		if(time.equals("0")) return 0L;
 		//Variables to hold values ;D
 		Long hours = 0L, minutes = 0L, seconds = 0L;
 		String curVal;
@@ -442,7 +448,10 @@ public class PvPTimer extends JavaPlugin {
 	//API STUFF 
 	public void addPlayer(Player p, Long timeStamp, TimeItemType type) {
 		if(p == null) return;
-		times.put(p.getName(), new TimeItem(timeStamp + parseTime(config.getString(TimeItemType.getConfigNode(type, getGroup(p)))), type));
+		long time = config.getTime(TimeItemType.getConfigNode(type, getGroup(p)));
+		if(time == 0) return;
+		
+		times.put(p.getName(), new TimeItem(timeStamp + time, type));
 	}
 	
 	public void checkPlayer(OfflinePlayer p) {
@@ -451,7 +460,11 @@ public class PvPTimer extends JavaPlugin {
 			return;
 		}
 		String name = p.getName();
-		if (times.containsKey(name)) if (times.get(name).getEndTime() <= System.currentTimeMillis()) times.remove(name);
+		if (times.containsKey(name))
+			if (times.get(name).getEndTime() <= System.currentTimeMillis()) {
+				times.remove(name);
+				//Add timeout when not.... online? 3:
+			}
 	}
 	public void checkPlayer(Player p) {
 		checkPlayer(p, true);
@@ -464,14 +477,23 @@ public class PvPTimer extends JavaPlugin {
 		String name = p.getName();
 		if (times.containsKey(name)) {
 			if (times.get(name).getEndTime() <= System.currentTimeMillis()) {
-				times.remove(name);
-				if(send) p.sendMessage(prefix + lang("protectionExpired"));
+				if(times.get(name).getType() != TimeItemType.TIMEOUT) {
+					if(send) p.sendMessage(prefix + lang("protectionExpired"));
+					
+					addPlayer(p, System.currentTimeMillis(), TimeItemType.TIMEOUT);
+					p.sendMessage(prefix + lang("timedOut", p.getName(), getTimeLeft(p)));
+				} else {
+					//remove timeout
+					times.remove(name);
+					p.sendMessage(prefix + lang("notTimedOut", p.getName(), getTimeLeft(p)));
+				}
 			}
 		}
 	}
 	
 	public Long getTimeLeft(OfflinePlayer p) {
-		if(isProtected(p)) return times.get(p.getName()).getEndTime() - System.currentTimeMillis();
+		//the OR fixes timeout :)
+		if(isProtected(p) || times.containsKey(p.getName())) return times.get(p.getName()).getEndTime() - System.currentTimeMillis();
 		return 0L;
 	}
 	public Long getTimeLeft(Player p) {
@@ -480,15 +502,26 @@ public class PvPTimer extends JavaPlugin {
 	
 	public boolean isProtected(OfflinePlayer p) {
 		checkPlayer(p);
-		return times.containsKey(p.getName());
+		return times.containsKey(p.getName()) && times.get(p.getName()).getType() != TimeItemType.TIMEOUT;
 	}
 	public boolean isProtected(Player p) {
 		checkPlayer(p);
-		return times.containsKey(p.getName());
+		return times.containsKey(p.getName()) && times.get(p.getName()).getType() != TimeItemType.TIMEOUT;
+	}
+	public boolean isTimeout(OfflinePlayer p) {
+		checkPlayer(p);
+		return times.containsKey(p.getName()) && times.get(p.getName()).getType() == TimeItemType.TIMEOUT;
+	}
+	public boolean isTimeout(Player p) {
+		checkPlayer(p);
+		return times.containsKey(p.getName()) && times.get(p.getName()).getType() == TimeItemType.TIMEOUT;
 	}
 	
 	public boolean isWorldExcluded(World w) {
-		return excludedWorlds.contains(w.getName());
+		return isWorldExcluded(w.getName());
+	}
+	public boolean isWorldExcluded(String w) {
+		return excludedWorlds.contains(w);
 	}
 	
 	File localFile(String f) {

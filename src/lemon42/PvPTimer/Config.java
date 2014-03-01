@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.channels.FileChannel;
 
 import lemon42.PvPTimer.PvPTimer;
 import lemon42.PvPTimer.Utils.FlatListReader;
@@ -69,6 +68,11 @@ class Config {
 					if(paths.contains(key) && key != "revision") curConfig.set(key, config.get(key));
 
 			//2) Migrate values from old revisions
+			
+			//rev 1 > base
+			//rev 2 > excludedWorlds; timeamounts with groups
+			//rev 3 > allowEnderpearl, allowNonPlayerDeath, joinMessageDelay
+			//        timeAmounts.timeout
 			if(rev == -1) {				
 				//Before new config was introduced			
 				if(paths.contains("config.timeAmount") && paths.contains("config.timeMeasure")) {
@@ -106,6 +110,8 @@ class Config {
 						if(PvPTimer.parseTime(amount + type.substring(0, 1)) != null)
 							curConfig.set("timeAmounts.newPlayers", "" + amount + type.substring(0, 1).toLowerCase());
 				}
+			} else if(rev == 2) {
+				//only new keys in 3
 			}
 			
 			curConfig.set("migratedFrom", rev);
@@ -119,19 +125,15 @@ class Config {
 				try {
 					if(theConfigBackup.exists()) theConfigBackup.delete();
 					theConfigBackup.createNewFile();
+
+					FileInputStream source = new FileInputStream(theConfig);
+					FileOutputStream destination = new FileOutputStream(theConfigBackup);
 					
-					FileChannel source = null;
-					FileChannel destination = null;
-					try {
-						source = new FileInputStream(theConfig).getChannel();
-						destination = new FileOutputStream(theConfigBackup).getChannel();
-						
-						long count = 0;
-						while((count += destination.transferFrom(source, count, source.size()-count))<source.size());
-					} finally {
-						if(source != null) source.close();
-						if(destination != null) destination.close();
-					}
+					long count = 0;
+					while((count += destination.getChannel().transferFrom(source.getChannel(), count, source.getChannel().size() - count)) < source.getChannel().size());
+					
+					if(source != null) source.close();
+					if(destination != null) destination.close();
 				} catch (Exception e) {
 					plugin.printException(e, "Error while creating backup!");
 				}
@@ -227,5 +229,9 @@ class Config {
 	}
 	public boolean getBoolean(String path) {
 		return config.getBoolean(path);
+	}
+	public Long getTime(String path) {
+		if(!contains(path)) return 0L;
+		return PvPTimer.parseTime(config.getString(path));
 	}
 }

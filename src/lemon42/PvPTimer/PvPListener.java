@@ -2,6 +2,8 @@ package lemon42.PvPTimer;
 
 import java.util.HashMap;
 import lemon42.PvPTimer.TimeItem.TimeItemType;
+
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -11,13 +13,17 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.scheduler.BukkitRunnable;
 
 class PvPListener implements Listener {
 	PvPTimer plugin;
@@ -32,16 +38,28 @@ class PvPListener implements Listener {
 		config = plugin.config;
 	}
 	
+	public boolean checkWorld(EntityEvent event) {
+		return (event.getEntity() instanceof Player || event.getEntityType() == EntityType.PLAYER)
+				&& plugin.isWorldExcluded(event.getEntity().getWorld());
+	}
+	public boolean checkWorld(PlayerEvent event) {
+		return plugin.isWorldExcluded(event.getPlayer().getWorld());
+	}
+	public boolean checkWorld(InventoryOpenEvent event) {
+		return plugin.isWorldExcluded(event.getPlayer().getWorld());
+	}
+	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPvP(EntityDamageByEntityEvent event) {
-		if ((event.getEntity() instanceof Player || event.getEntityType() == EntityType.PLAYER) && plugin.excludedWorlds.contains(event.getEntity().getWorld().getName())) return;
+		if (checkWorld(event)) return;
 		
+
 		if (event.getDamager() instanceof Player) {
 			//DAMAGER IS PLAYER
 			Player damager = (Player)event.getDamager();
 			if (plugin.isProtected(damager)) {
 				if (event.getEntity() instanceof Player) {
-					//DAMAGER PROTECTED HITS OTHER PLAYER
+					//DAMAGER PROTECTED HITS PLAYER		
 					event.setCancelled(true);
 					damager.sendMessage(plugin.prefix + plugin.lang("cannotHurtWhileProtected", plugin.getTimeLeft((Player)event.getEntity())));
 				}
@@ -52,6 +70,12 @@ class PvPListener implements Listener {
 			if (shooter instanceof Player && event.getEntity() instanceof Player) {
 				//DAMAGER IS PLAYER - HURT IS PLAYER
 				Player pShooter = (Player)shooter;
+				
+				if(pShooter.getName().equals(((Player)event.getEntity()).getName())) {
+					//same player => enderpearl!
+					return;
+				}
+				
 				if (plugin.isProtected(pShooter)) {
 					//DAMAGER PROTECTED HITS OTHER PLAYER (PROJECTILE)
 					event.setCancelled(true);
@@ -73,7 +97,7 @@ class PvPListener implements Listener {
 			Player hurtPlayer = (Player)event.getEntity();
 			if (plugin.isProtected(hurtPlayer)) { //damage by entity
 				//HURT IS PROTECTED, DISALLOW ALL DAMAGE IF CONFIG
-				if (config.getString("damageType") == "all") event.setCancelled(true);
+				if (config.getString("damageType").equalsIgnoreCase("all")) event.setCancelled(true);
 				else if (event.getDamager() instanceof Player) { //damage by player
 					//DAMAGER PLAYER HURTS PLAYER
 					event.setCancelled(true);
@@ -86,18 +110,36 @@ class PvPListener implements Listener {
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onJoin(PlayerJoinEvent event) {
+		if (checkWorld(event)) return;
+		
+				
 		Player p = event.getPlayer();
+		
+		if(plugin.isTimeout(p)) return;
 		plugin.checkPlayer(p, false);
 		//plugin.log.info("Player " + p.getName() + " timestamp is " +p.getFirstPlayed() + ", current timestamp is " + System.currentTimeMillis() + ", diff is " + (System.currentTimeMillis() - p.getFirstPlayed()));
 		if ((System.currentTimeMillis() - p.getFirstPlayed()) <= 2000 && !plugin.times.containsKey(p.getName())) { //New player... woo.
-			if(PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.FIRSTJOIN, plugin.getGroup(event.getPlayer())))) == 0) return;
+			if(config.getTime(TimeItemType.getConfigNode(TimeItemType.FIRSTJOIN, plugin.getGroup(event.getPlayer()))) == 0) return;
 			
 			plugin.addPlayer(p, p.getFirstPlayed(), TimeItemType.FIRSTJOIN);
-			p.sendMessage(plugin.prefix + plugin.lang("firstTime", p.getName(), PvPTimer.parseTime(config.getString("timeAmounts.newPlayers"))));
-		} else {
-			if(PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(event.getPlayer())))) == 0) return;
 			
-			if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(p)))))) {
+			//Handles join message delay
+			new BukkitRunnable() {
+				Player p;
+				public BukkitRunnable init(Player player) {
+					p = player;
+					return this;
+				}
+				
+	            @Override
+	            public void run() {
+	            	p.sendMessage(plugin.prefix + plugin.lang("firstTime", p.getName(), config.getTime("timeAmounts.newPlayers")));
+	            }	 
+	        }.init(p).runTaskLater(this.plugin, config.getTime("joinMessageDelay") / 1000 * 20);
+		} else {
+			if(config.getTime(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(event.getPlayer()))) == 0) return;
+			
+			if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < config.getTime(TimeItemType.getConfigNode(TimeItemType.JOIN, plugin.getGroup(p))))) {
 				plugin.addPlayer(p, System.currentTimeMillis(), TimeItemType.JOIN);
 			}
 			
@@ -108,15 +150,21 @@ class PvPListener implements Listener {
 		if(plugin.updater.isUpdateNeeded() && p.hasPermission("PvPTimer.updateNotify"))
 			p.sendMessage(plugin.prefix + plugin.lang("updateAvailable").replace("%link%", plugin.updater.getLink()));
 	}
-	
+
 	@EventHandler(ignoreCancelled = true)
 	public void onRespawn(PlayerRespawnEvent event) {
-		Player p = event.getPlayer();
+		if (checkWorld(event)) return;
 		
+		Player p = event.getPlayer();
+		if(plugin.isTimeout(p)) return;
 		plugin.checkPlayer(p, false);
 		
-		if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p)))))) {
-			if (PvPTimer.parseTime(config.getString(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p)))) != 0) {
+		//suicide protection + other entities
+		if(!config.getBoolean("allowNonPlayerDeath"))
+			if(p.getKiller() == null || p.getKiller() == p) return;
+		
+		if (!plugin.isProtected(p) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < config.getTime(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p))))) {
+			if (config.getTime(TimeItemType.getConfigNode(TimeItemType.RESPAWN, plugin.getGroup(p))) != 0) {
 				plugin.addPlayer(p, System.currentTimeMillis(), TimeItemType.RESPAWN);
 				p.sendMessage(plugin.prefix + plugin.lang("respawn", p.getName(), plugin.getTimeLeft(p)));
 			}
@@ -126,18 +174,25 @@ class PvPListener implements Listener {
 	}
 	
 	@EventHandler(ignoreCancelled = true)
-	public void onTeleport(PlayerTeleportEvent event) {		
-		if (PvPTimer.parseTime(config.getString(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(event.getPlayer())))) != 0) {
+	public void onTeleport(PlayerTeleportEvent event) {
+		if (checkWorld(event)) return;
+		
+		//Enderpearl check
+		if(event.getCause() == TeleportCause.ENDER_PEARL && !config.getBoolean("allowEnderpearl")) return;
+		
+		if (config.getTime(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(event.getPlayer()))) != 0) {
 			Player p = event.getPlayer();
+			if(plugin.isTimeout(p)) return;
 			
-			//Fixes world to different world teleport
+			//Already handled by other event
 			if(event.getFrom().getWorld() != event.getTo().getWorld()) return;
 			
 			plugin.checkPlayer(p, false);
 			
-			if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < PvPTimer.parseTime(plugin.config.getString(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(p)))))) {
+			if (!plugin.times.containsKey(p.getName()) || (plugin.times.get(p.getName()).getEndTime() - System.currentTimeMillis() < config.getTime(TimeItemType.getConfigNode(TimeItemType.TELEPORT, plugin.getGroup(p))))) {
 				
 				//Less than 5 blocks away :P
+				//Distance squared is faster :)
 				if (event.getFrom().distanceSquared(event.getTo()) <= 25) return;
 				
 				plugin.addPlayer(p, System.currentTimeMillis(), TimeItemType.RESPAWN);
@@ -160,7 +215,9 @@ class PvPListener implements Listener {
 				if (plugin.isWorldExcluded(event.getFrom()))
 					p.sendMessage(plugin.prefix + plugin.lang("protectionActiveAgain", p.getName(), plugin.getTimeLeft(p)));
 			} else {
-				if (PvPTimer.parseTime(config.getString(TimeItemType.getConfigNode(TimeItemType.WORLDCHANGE, plugin.getGroup(event.getPlayer())) + w)) != 0) {
+				if(plugin.isTimeout(p)) return;
+				
+				if (config.getTime(TimeItemType.getConfigNode(TimeItemType.WORLDCHANGE, plugin.getGroup(event.getPlayer())) + w) != 0) {
 					plugin.addPlayer(p, System.currentTimeMillis(), TimeItemType.WORLDCHANGE);
 					p.sendMessage(plugin.prefix + plugin.lang("worldChange", p.getName(), plugin.getTimeLeft(p)));
 				}
@@ -173,6 +230,7 @@ class PvPListener implements Listener {
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPickup(PlayerPickupItemEvent event) {
+		if (checkWorld(event)) return;
 		if(config.getBoolean("allowPickup")) return;
 		
 		Player p = event.getPlayer();
@@ -193,6 +251,7 @@ class PvPListener implements Listener {
 	//Prevents opening containers
 	@EventHandler
 	public void onInventoryOpen(InventoryOpenEvent event) {
+		if (checkWorld(event)) return;
 		if(config.getBoolean("allowContainer")) return;
 		
 		Player player = (Player)event.getPlayer();
@@ -206,10 +265,13 @@ class PvPListener implements Listener {
 	//Prevents the animation
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onChestOpen(PlayerInteractEvent event) {
+		if (checkWorld(event)) return;
 		if(config.getBoolean("allowContainer")) return;
 		
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			if(event.getClickedBlock().getTypeId() == 54 || event.getClickedBlock().getTypeId() ==  130) {
+			if(event.getClickedBlock().getType() == Material.CHEST ||
+					event.getClickedBlock().getType() == Material.ENDER_CHEST ||
+					event.getClickedBlock().getType() == Material.TRAPPED_CHEST) {
 				Player player = (Player)event.getPlayer();
 				if(player != null && plugin.isProtected(player)) {
 					event.setCancelled(true);

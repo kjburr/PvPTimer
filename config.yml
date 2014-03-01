@@ -10,12 +10,14 @@ language: 'English'
 
 #Time amount to protect players on first join, respawn, consecutive joins, and teleport.
 #Set any to 0 to disable the protection for that type.
+#Timeout -> amount of time in which they cannot receive new protections, starts when any protection expires
 timeAmounts:
     newPlayers: 10m
     default:
         respawn: 30s
         join: 30s
         teleport: 10s
+        timeout: 20s
         worldChange:
             defaultValue: 10s
             world: 20s
@@ -24,6 +26,7 @@ timeAmounts:
         respawn: 1m
         join: 1m
         teleport: 20s
+        timeout: 0s
         worldChange:
             defaultValue: 20s
             world: 1m
@@ -36,6 +39,10 @@ checkEvery: 10s
 #Defines the amount of time between each save to disk.
 #High intervals are recommended, as saving isn't required to be done very often.
 saveEvery: 30m
+
+#Allows you to delay the join message a bit so players can see it after the clutter
+#Set to 0 to show instantly!
+joinMessageDelay: 5s
 
 #Exclude specific worlds from any protection.
 excludedWorlds: [world_excluded1, world_excluded2]
@@ -51,6 +58,11 @@ allowPickup: true
 #Allows using containers while protected
 allowContainer: true
 
+#Wether or not to protect when using enderpearls to teleport
+allowEnderpearl: false
+#Wether or not to protect when death was not caused by a player
+allowNonPlayerDeath: true
+
 #Help this plugin by sending anonymous stats to MCStats.
 #Note that if the main Metrics settings are disabled then this will not take effect.
 #Gathered stats are publicly available at http://mcstats.org/plugin/PvPTimer
@@ -61,7 +73,7 @@ checkForUpdates: true
 
 #DO NOT ALTER THESE VALUES! It will screw up your configuration!
 #This helps the plugin migrate configurations when updating PvPTimer
-revision: 2
+revision: 3
 migratedFrom: -1
 
 #Thanks for using PvPTimer :)

@@ -7,7 +7,7 @@ public enum TimeItemType {
 	ADMIN(3), //Admin given protections
 	TELEPORT(4),//Teleporting :0
 	WORLDCHANGE(5), //On changing worlds.
-	TIMEOUT(255); //Disallow protection when in timeout. Added for next update?
+	TIMEOUT(255); //Disallow protection when in timeout
 	
 	//Constructor
 	TimeItemType(int id) {
@@ -34,7 +34,10 @@ public enum TimeItemType {
 		if(t == TimeItemType.JOIN) return "timeAmounts." + group + ".join";
 		//Admin does not have a configuration node!
 		if(t == TimeItemType.TELEPORT) return "timeAmounts." + group + ".teleport";
-		if(t == TimeItemType.WORLDCHANGE) return "timeAmounts." + group + ".worldChange"; //Append .world :0
+		if(t == TimeItemType.WORLDCHANGE) return "timeAmounts." + group + ".worldChange";
+		
+		if(t == TimeItemType.TIMEOUT) return "timeAmounts." + group + ".timeout";
+
 		return "";
 	}
 }

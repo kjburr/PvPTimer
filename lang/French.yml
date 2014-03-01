@@ -9,7 +9,7 @@
 #Toutes les variables ne sont pas forcément utilisables tout le temps.
 #Les couleurs sont aussi disponibles, sous la forme &[couleur]
 
-revision: 2
+revision: 3
 customFile: false
 author: lemon42
 prefix: '&9[PvPTimer] '
@@ -34,6 +34,10 @@ protectionResetForAll: Protection réinitialisée pour tous les joueurs connectés.
 protectionInactiveHere: Tu viens d'entrer dans un monde où la protection à été désactivée.
 protectionActiveAgain: Ta protection est de nouveau active.
 updateAvailable: 'Une mise à jour est disponible! Téléchargez-la ici: &b%link%'
+timedOut: Vous êtes maintenant en temps-mort pour &b%time%&9, vous ne pourrez plus recevoir de protection pendant cette période.
+notTimedOut: Vous n'êtes plus en temps-mort.
+checkTimeout: Vous êtes en temps-mort. Vous ne pouvez pas recevoir de protection pendant encore &b%time%&9.
+
 errorPrefix: '&cErreur: '
 playersOnly: Cette commande ne peux être utilisée que par des joueurs.
 noPerms: Tu n'as pas assez de permissions pour utiliser cette commande.
