@@ -295,7 +295,7 @@ class PvPListener implements Listener {
 		boolean cancelled = WorldGuard.isInBlockedRegion(event.getTo());
 		event.setCancelled(cancelled);
 		if (cancelled) {
-			player.sendMessage(plugin.lang("attemptEnterBlockedRegion"));
+			player.sendMessage(plugin.prefix + plugin.lang("attemptEnterBlockedRegion", player.getName(), plugin.getTimeLeft(player)));
 		}
 	}
 	
