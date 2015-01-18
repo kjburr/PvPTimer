@@ -15,7 +15,7 @@ public enum FactionsUUID {;
 	private static boolean enabled = false;
 
 	static {
-		enabled = Bukkit.getPluginManager().isPluginEnabled("Factions");
+		enabled = Bukkit.getPluginManager().isPluginEnabled("Factions") || Bukkit.getPluginManager().isPluginEnabled("HCFactions");
 	}
 
 
