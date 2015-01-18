@@ -3,6 +3,7 @@ package lemon42.PvPTimer;
 import java.util.HashMap;
 
 import lemon42.PvPTimer.TimeItem.TimeItemType;
+import lemon42.PvPTimer.integration.FactionsUUID;
 import lemon42.PvPTimer.integration.WorldGuard;
 
 import org.bukkit.Location;
@@ -286,7 +287,7 @@ class PvPListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerMove(PlayerMoveEvent event) {
+	public void onPlayerMoveBlock(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 		if (this.isSameBlockLocation(event.getTo(), event.getFrom())) return; // Player didn't move a full block
 		if (plugin.blockedRegionIds.isEmpty()) return; // No region ids are blocked
@@ -295,11 +296,25 @@ class PvPListener implements Listener {
 		boolean cancelled = WorldGuard.isInBlockedRegion(event.getTo());
 		event.setCancelled(cancelled);
 		if (cancelled) {
-			player.sendMessage(plugin.lang("attemptEnterBlockedRegion"));
+			player.sendMessage(plugin.prefix + plugin.lang("attemptEnterBlockedRegion", player.getName(), plugin.getTimeLeft(player)));
 		}
 	}
 	
 	private boolean isSameBlockLocation(Location loc1, Location loc2) {
 		return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY() && loc1.getBlockZ() == loc2.getBlockZ();
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerMoveChunk(PlayerMoveEvent event) {
+		Player player = event.getPlayer();
+		if (event.getTo().getChunk().equals(event.getFrom().getChunk())) return; // Player didn't change chunks
+		if (!config.getBoolean("preventFactionLandEntry")) return; // Faction land entry prevention is disabled
+		if (!plugin.isProtected(player)) return; // Player isn't protected
+		
+		boolean cancelled = FactionsUUID.isInBlockedChunk(player, event.getTo());
+		event.setCancelled(cancelled);
+		if (cancelled) {
+			player.sendMessage(plugin.prefix + plugin.lang("attemptEnterBlockedFactionLand", player.getName(), plugin.getTimeLeft(player)));
+		}
 	}
 }

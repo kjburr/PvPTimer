@@ -50,6 +50,9 @@ blockedRegionIds:
   - '1v1_arena'
   - 'pvp'
 
+#Prevent protected players from entering other factions' claimed faction land.
+preventFactionLandEntry: true
+
 #Exclude specific worlds from any protection.
 excludedWorlds: [world_excluded1, world_excluded2]
 
