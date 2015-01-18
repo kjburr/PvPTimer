@@ -38,6 +38,7 @@ updateAvailable: 'An update is available! Download it here: &b%link%'
 timedOut: You are now in timeout for &b%time%&9, you will no longer be able to get protected during this period.
 notTimedOut: You are no longer in timeout.
 checkTimeout: You are in timeout. You will not be able to be protected for another &b%time%&9.
+attemptEnterBlockedRegion: You cannot enter this area while protected from PvP.
 
 errorPrefix: '&cError: '
 playersOnly: Only players may use this command.

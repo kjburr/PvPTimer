@@ -44,6 +44,12 @@ saveEvery: 30m
 #Set to 0 to show instantly!
 joinMessageDelay: 5s
 
+#Prevent players from entering these regions while protected.
+#Requires WorldGuard.
+blockedRegionIds:
+  - '1v1_arena'
+  - 'pvp'
+
 #Exclude specific worlds from any protection.
 excludedWorlds: [world_excluded1, world_excluded2]
 

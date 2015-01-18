@@ -8,13 +8,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import lemon42.PvPTimer.TimeItem.TimeItem;
 import lemon42.PvPTimer.TimeItem.TimeItemType;
+import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -25,7 +30,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
-import net.milkbowl.vault.permission.Permission;
 
 public class PvPTimer extends JavaPlugin {
 	Logger log;
@@ -39,6 +43,8 @@ public class PvPTimer extends JavaPlugin {
 	public List<String> excludedWorlds;
 	public List<String> groups; //This contains the groups which, in the config, are not default.
 	public Updater updater;
+	
+	public Set<String> blockedRegionIds;
 	
 	//These values are replaced by language loading, but kept for reference.
 	public String prefix = ChatColor.BLUE + "[PvPTimer] ";
@@ -64,6 +70,9 @@ public class PvPTimer extends JavaPlugin {
 		
 		//Excluded worlds
 		excludedWorlds = config.getStringList("excludedWorlds");
+		
+		// Load blocked region ids
+		blockedRegionIds = new HashSet<String>(config.getStringList("blockedRegionIds"));
 		
 		//Load lang from file
 		//This will save the default so no worries

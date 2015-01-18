@@ -3,7 +3,7 @@ version: 1.3
 description: Prevent new users from being PvPed to death at the start!
 author: lemon42
 authors: [lemon42]
-softdepend: [Vault]
+softdepend: [Vault, WorldGuard]
 main: lemon42.PvPTimer.PvPTimer
 database: false
 

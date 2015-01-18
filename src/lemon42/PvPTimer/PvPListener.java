@@ -3,7 +3,9 @@ package lemon42.PvPTimer;
 import java.util.HashMap;
 
 import lemon42.PvPTimer.TimeItem.TimeItemType;
+import lemon42.PvPTimer.integration.WorldGuard;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -20,6 +22,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -280,5 +283,23 @@ class PvPListener implements Listener {
 				}
 			}
 		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerMove(PlayerMoveEvent event) {
+		Player player = event.getPlayer();
+		if (this.isSameBlockLocation(event.getTo(), event.getFrom())) return; // Player didn't move a full block
+		if (plugin.blockedRegionIds.isEmpty()) return; // No region ids are blocked
+		if (!plugin.isProtected(player)) return; // Player isn't protected
+		
+		boolean cancelled = WorldGuard.isInBlockedRegion(event.getTo());
+		event.setCancelled(cancelled);
+		if (cancelled) {
+			player.sendMessage(plugin.lang("attemptEnterBlockedRegion"));
+		}
+	}
+	
+	private boolean isSameBlockLocation(Location loc1, Location loc2) {
+		return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY() && loc1.getBlockZ() == loc2.getBlockZ();
 	}
 }
