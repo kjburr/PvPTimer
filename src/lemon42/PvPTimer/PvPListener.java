@@ -1,6 +1,7 @@
 package lemon42.PvPTimer;
 
 import java.util.HashMap;
+
 import lemon42.PvPTimer.TimeItem.TimeItemType;
 
 import org.bukkit.Material;
@@ -15,13 +16,13 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -66,7 +67,7 @@ class PvPListener implements Listener {
 			}
 		} else if (event.getDamager() instanceof Projectile) {
 			//DAMAGER IS PROJECTILE
-			LivingEntity shooter = ((Projectile)event.getDamager()).getShooter();
+			LivingEntity shooter = (LivingEntity) ((Projectile)event.getDamager()).getShooter();
 			if (shooter instanceof Player && event.getEntity() instanceof Player) {
 				//DAMAGER IS PLAYER - HURT IS PLAYER
 				Player pShooter = (Player)shooter;

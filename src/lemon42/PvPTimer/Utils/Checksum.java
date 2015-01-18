@@ -1,4 +1,4 @@
-private package lemon42.PvPTimer.Utils;
+package lemon42.PvPTimer.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;

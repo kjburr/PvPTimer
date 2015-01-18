@@ -1,4 +1,4 @@
-private package lemon42.PvPTimer.TimeItem;
+package lemon42.PvPTimer.TimeItem;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

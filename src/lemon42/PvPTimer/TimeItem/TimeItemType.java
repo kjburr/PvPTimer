@@ -1,4 +1,4 @@
-private package lemon42.PvPTimer.TimeItem;
+package lemon42.PvPTimer.TimeItem;
 
 public enum TimeItemType {
 	FIRSTJOIN(0), //Protection for being a newbie

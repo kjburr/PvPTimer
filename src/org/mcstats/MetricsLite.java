@@ -28,12 +28,6 @@
 
 package org.mcstats;
 
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -44,8 +38,15 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.logging.Level;
+
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 public class MetricsLite {
 
@@ -282,7 +283,7 @@ public class MetricsLite {
         data.append(encode("guid")).append('=').append(encode(guid));
         encodeDataPair(data, "version", description.getVersion());
         encodeDataPair(data, "server", Bukkit.getVersion());
-        encodeDataPair(data, "players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length));
+        encodeDataPair(data, "players", Integer.toString(this.getOnlinePlayers()));
         encodeDataPair(data, "revision", String.valueOf(REVISION));
 
         // If we're pinging, append it
@@ -365,5 +366,18 @@ public class MetricsLite {
     private static String encode(final String text) throws UnsupportedEncodingException {
         return URLEncoder.encode(text, "UTF-8");
     }
+
+
+	private int getOnlinePlayers() {
+		Object obj = Bukkit.getOnlinePlayers();
+		
+		if (obj instanceof Collection) {
+			return ((Collection<?>) obj).size();
+		} else if (obj instanceof Object[]) {
+			return ((Object[]) obj).length;
+		} else {
+			return -1; // Error.
+		}
+	}
 
 }
