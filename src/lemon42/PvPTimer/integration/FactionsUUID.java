@@ -21,14 +21,14 @@ public enum FactionsUUID {;
 
 	public static boolean isInBlockedChunk(Player player, Location location) {
 		if (!enabled) {
-			return false; // Factions isn't loaded
+			return false; // Factions isn't loaded.
 		}
 		FPlayer fplayer = FPlayers.getInstance().getByPlayer(player);
 		FLocation flocation = new FLocation(location);
-		
+
 		Faction myFaction = fplayer.getFaction();
 		Faction otherFaction = Board.getInstance().getFactionAt(flocation);
-		
+
 		return otherFaction.isNormal() && !otherFaction.equals(myFaction);
 	}
 
