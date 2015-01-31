@@ -11,7 +11,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 
 public enum WorldGuard {;
 
-	private static boolean enabled = false;
+	private static boolean enabled;
 
 	static {
 		enabled = Bukkit.getPluginManager().isPluginEnabled("WorldGuard");
