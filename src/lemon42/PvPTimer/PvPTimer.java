@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 
 import lemon42.PvPTimer.TimeItem.TimeItem;
 import lemon42.PvPTimer.TimeItem.TimeItemType;
+import lemon42.PvPTimer.integration.WorldGuard;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.ChatColor;
@@ -55,8 +56,11 @@ public class PvPTimer extends JavaPlugin {
 	public String errorArgs = errorPrefix + "Invalid arguments!";
 	public String notProtected = errorPrefix + "You are not protected!";
 
+
 	@Override
 	public void onEnable() {
+		WorldGuard.init(this);
+
 		log = this.getLogger();
 		config = new Config(this);
 		lang = new LanguageProvider(this);
