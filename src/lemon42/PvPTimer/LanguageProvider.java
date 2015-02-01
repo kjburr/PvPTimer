@@ -43,7 +43,7 @@ class LanguageProvider {
 		File f = plugin.localFile(path);
 		
 		if(!f.exists()) {
-			if(localeFile == "English") {
+			if(localeFile.equals("English")) {
 				saveDefault();
 			} else {
 				plugin.log.warning("No such locale '" + localeFile + "'. Using default.");
